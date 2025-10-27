@@ -1,4 +1,4 @@
-import React, { useState} from 'react';
+import React, { useState, useEffect} from 'react';
 
 import YandexMapContainer from './components/YandexMapContainer'; 
 import PhoneModal from './components/PhoneModal'; 
@@ -14,22 +14,53 @@ import dog1 from './img/dog1.jpg';
 import dog2 from './img/dog2.jpg';
 import dog3 from './img/dog3.jpg';
 import cat from './img/cat.jpg';
-import pets from './img/pets.jpg';
-import pet1 from './img/pet1.jpg';
-import pet2 from './img/pet2.jpg';
-import pet3 from './img/pet3.jpg';
-import pet4 from './img/pet4.jpg';
-import pet5 from './img/pet5.jpg';
-import pet6 from './img/pet6.jpg';
-import pet7 from './img/pet7.jpg';
-import pet8 from './img/pet8.jpg';
+import pinkpets from './img/pets.jpg';
+
 
 function App() {
   const [showAllPets, setShowAllPets] = useState(false);
+  const [pets, setPets] = useState([]);
+  const [selectedPet, setSelectedPet] = useState(null);
+  const [showPetModal, setShowPetModal] = useState(false);
+
+  const API_URL = 'http://localhost:8080/api/pets';
+
+  useEffect(() => {
+    loadPets();
+  }, []);
+
+  const loadPets = () => {
+    fetch(API_URL)
+      .then(response => response.json())
+      .then(data => {
+        // Преобразуем пути к фото
+        const petsWithFullPhotoPath = data.map(pet => ({
+          ...pet,
+          photo: pet.photo ? `http://localhost:8080${pet.photo}` : 'https://placedog.net/300/200'
+        }));
+        setPets(petsWithFullPhotoPath);
+      })
+      .catch(error => console.error("Ошибка при загрузке питомцев:", error));
+  };
 
   const toggleShowPets = () => {
     setShowAllPets(!showAllPets);
   };
+
+  const handlePetClick = (pet) => {
+    setSelectedPet(pet);
+    setShowPetModal(true);
+  };
+
+  const closePetModal = () => {
+    setShowPetModal(false);
+    setSelectedPet(null);
+  };
+
+  // Разделяем питомцев на группы для отображения
+  const visiblePets = showAllPets ? pets : pets.slice(0, 8);
+  const firstRowPets = visiblePets.slice(0, 4);
+  const secondRowPets = visiblePets.slice(4, 8);
 
   return (
     <div className="wrapper">
@@ -53,51 +84,228 @@ function App() {
       <div className="dream_home">
         <span id="dream">МЕЧТАЮТ О ДОМЕ</span>
       </div>
-      {/* ТУТ В DIV = PATS БУДУТ ЖИВОТНЫЕ ИЗ БД */}
-      <div className="pats" style={{textAlign:"center"}}>
-        <div className="container">
 
-  <div className="row justify-content-center" style={{paddingRight:"0px"}}>
-    {/* <div className="col col-sm d-sm-none d-block text-center" style={{padding:"0px"}}></div> */}
-    <div className="col-6 col-sm-3 text-center" style={{padding:"0px"}}>  
-      <img src={pet1} className="pet" />
+
+      {/* КАРТОЧКИ ЖИВОТНЫХ ИЗ БД */}
+<div className="pats" style={{textAlign:"center"}}>
+  <div className="container">
+    {/* Для больших экранов (≥576px) - 2 строки по 4 карточки */}
+    <div className="d-none d-sm-block">
+      {/* Первая строка карточек - всегда видна */}
+      <div className="row justify-content-center" style={{paddingRight:"0px"}}>
+        {pets.slice(0, 4).map((pet, index) => (
+          <div key={pet.id || index} className="col-6 col-sm-3 text-center" style={{padding:"0px"}}>
+            <div className="pet-card" onClick={() => handlePetClick(pet)}>
+              <img src={pet.photo} alt={pet.name} className="pet" />
+              <div className="pet-info">
+                <h5 style={{margin:'0'}}>{pet.name}</h5>
+                <p style={{margin:'0'}}>{pet.gender}</p>
+                <p style={{margin:'0'}}>{pet.age}</p>
+              </div>
+            </div>
+          </div>
+        ))}
+      </div>
+
+      {/* Вторая строка карточек - скрывается если не нажата кнопка "Показать больше" */}
+        <div className="row justify-content-center" style={{paddingRight:"0px"}}>
+          {pets.slice(4, 8).map((pet, index) => (
+            <div key={pet.id || index + 4} className="col-6 col-sm-3 text-center" style={{padding:"0px"}}>
+              <div className="pet-card" onClick={() => handlePetClick(pet)}>
+                <img src={pet.photo} alt={pet.name} className="pet" />
+                <div className="pet-info">
+                  <h5 style={{margin:'0'}}>{pet.name}</h5>
+                  <p style={{margin:'0'}}>{pet.gender}</p>
+                  <p style={{margin:'0'}}>{pet.age}</p>
+                </div>
+              </div>
+            </div>
+          ))}
+        </div>
+
+      {/* Дополнительные строки для всех животных когда нажата кнопка "Показать больше" */}
+      {showAllPets && pets.length > 8 && (
+        <>
+          {Array.from({ length: Math.ceil((pets.length - 8) / 4) }).map((_, rowIndex) => (
+            <div key={rowIndex} className="row justify-content-center" style={{paddingRight:"0px"}}>
+              {pets.slice(8 + rowIndex * 4, 8 + (rowIndex + 1) * 4).map((pet, index) => (
+                <div key={pet.id || 8 + rowIndex * 4 + index} className="col-6 col-sm-3 text-center" style={{padding:"0px"}}>
+                  <div className="pet-card" onClick={() => handlePetClick(pet)}>
+                    <img src={pet.photo} alt={pet.name} className="pet" />
+                    <div className="pet-info">
+                      <h5 style={{margin:'0'}}>{pet.name}</h5>
+                      <p style={{margin:'0'}}>{pet.gender}</p>
+                      <p style={{margin:'0'}}>{pet.age}</p>
+                    </div>
+                  </div>
+                </div>
+              ))}
+            </div>
+          ))}
+        </>
+      )}
     </div>
-    <div className="col-6 col-sm-3 text-center" style={{padding:"0px"}}>
-      <img src={pet2} className="pet" />
+
+    {/* Для мобильных экранов (<576px) - 1 строка из 4 карточек */}
+    <div className="d-block d-sm-none">
+      {/* Первая строка карточек - всегда видна */}
+      <div className="row justify-content-center" style={{paddingRight:"0px"}}>
+        {pets.slice(0, 4).map((pet, index) => (
+          <div key={pet.id || index} className="col-6 text-center" style={{padding:"0px"}}>
+            <div className="pet-card" onClick={() => handlePetClick(pet)}>
+              <img src={pet.photo} alt={pet.name} className="pet" />
+              <div className="pet-info">
+                <h5 style={{margin:'0'}}>{pet.name}</h5>
+                <p style={{margin:'0'}}>{pet.gender}</p>
+                <p style={{margin:'0'}}>{pet.age}</p>
+              </div>
+            </div>
+          </div>
+        ))}
+      </div>
+
+      {/* Остальные карточки показываются только при нажатии "Показать больше" */}
+      {showAllPets && pets.length > 4 && (
+        <>
+          {Array.from({ length: Math.ceil((pets.length - 4) / 4) }).map((_, rowIndex) => (
+            <div key={rowIndex} className="row justify-content-center" style={{paddingRight:"0px"}}>
+              {pets.slice(4 + rowIndex * 4, 4 + (rowIndex + 1) * 4).map((pet, index) => (
+                <div key={pet.id || 4 + rowIndex * 4 + index} className="col-6 text-center" style={{padding:"0px"}}>
+                  <div className="pet-card" onClick={() => handlePetClick(pet)}>
+                    <img src={pet.photo} alt={pet.name} className="pet" />
+                    <div className="pet-info">
+                      <h5 style={{margin:'0'}}>{pet.name}</h5>
+                      <p style={{margin:'0'}}>{pet.gender}</p>
+                      <p style={{margin:'0'}}>{pet.age}</p>
+                    </div>
+                  </div>
+                </div>
+              ))}
+            </div>
+          ))}
+        </>
+      )}
     </div>
-    {/* <div className="col col-sm d-sm-none d-block text-center" style={{padding:"0px"}}></div> */}
-    <div className="col-6 col-sm-3 text-center" style={{padding:"0px"}}>  
-      <img src={pet3} className="pet" />
-    </div>
-    <div className="col-6 col-sm-3 text-center" style={{padding:"0px"}}>
-      <img src={pet4} className="pet" />
-    </div>
-    
+
+    {/* Кнопка "Показать больше/Скрыть" */}
+    {pets.length > 4 && (
+      <button className="look_more" onClick={toggleShowPets}>
+        {showAllPets ? 'Скрыть' : 'Показать больше'}
+      </button>
+    )}
   </div>
+</div>
 
-  <div className="row justify-content-center" style={{paddingRight:"0px"}}>
-  {/* <div className="col-3 col-sm-1 d-sm-none d-block text-center"></div> */}
+      {/* Модальное окно с детальной информацией о питомце */}
+{showPetModal && selectedPet && (
+  <div className="modal-overlay" onClick={closePetModal}>
+    <div className="modal-content pet-modal" onClick={(e) => e.stopPropagation()}>
+      <button className="modal-close-btn" onClick={closePetModal}>×</button>
+      
+      <div className="modal-pet-container">
+        {/* Для больших экранов - картинка слева, контент справа */}
+        <div className="d-none d-md-block">
+          <div className="modal-pet-layout-horizontal">
+            <div className="modal-pet-image-side">
+              <img src={selectedPet.photo} alt={selectedPet.name} />
+            </div>
+            
+            <div className="modal-pet-details-side">
+              <h2>{selectedPet.name}</h2>
+              
+              <div className="pet-details-grid">
+                <div className="detail-item">
+                  <span className="detail-label">Пол:</span>
+                  <span className="detail-value">{selectedPet.gender}</span>
+                </div>
+                
+                <div className="detail-item">
+                  <span className="detail-label">Возраст:</span>
+                  <span className="detail-value">{selectedPet.age}</span>
+                </div>
+                
+                <div className="detail-item">
+                  <span className="detail-label">Здоровье:</span>
+                  <span className="detail-value">{selectedPet.health}</span>
+                </div>
+                
+                <div className="detail-item">
+                  <span className="detail-label">Стерилизован:</span>
+                  <span className="detail-value">{selectedPet.sterilized ? "Да" : "Нет"}</span>
+                </div>
+                
+                <div className="detail-item">
+                  <span className="detail-label">Приучен к лотку:</span>
+                  <span className="detail-value">{selectedPet.tray ? "Да" : "Нет"}</span>
+                </div>
+              </div>
+              
+              <div className="pet-description">
+                <h4>Описание:</h4>
+                <p>{selectedPet.description}</p>
+              </div>
+              
+              <div className="modal-actions">
 
-    <div className={`col-6 col-sm-3 ${!showAllPets ? 'd-none d-sm-block' : ''} text-center`} style={{padding:"0px"}}>
-      <img src={pet5} className="pet" />
-    </div>
-    <div className={`col-6 col-sm-3 ${!showAllPets ? 'd-none d-sm-block' : ''} text-center`} style={{padding:"0px"}}>
-      <img src={pet6} className="pet" />
-    </div>
-    {/* <div className="col-3 col-sm-1 d-sm-none d-block text-center"></div> */}
+                <div style={{marginRight:'145vw', marginTop:'-2vw'}}><PhoneModal /></div>
+              </div>
+            </div>
+          </div>
+        </div>
 
-    <div className={`col-6 col-sm-3 ${!showAllPets ? 'd-none d-sm-block' : ''} text-center`} style={{padding:"0px"}}>
-      <img src={pet7} className="pet" />
-    </div>
-    <div className={`col-6 col-sm-3 ${!showAllPets ? 'd-none d-sm-block' : ''} text-center`} style={{padding:"0px"}}>
-      <img src={pet8} className="pet" />
+        {/* Для мобильных экранов - картинка сверху, контент снизу */}
+        <div className="d-block d-md-none">
+          <div className="modal-pet-layout-vertical">
+            <div className="modal-pet-image-top">
+              <img src={selectedPet.photo} alt={selectedPet.name} />
+            </div>
+            
+            <div className="modal-pet-details-bottom">
+              <h2>{selectedPet.name}</h2>
+              
+              <div className="pet-details-grid">
+                <div className="detail-item">
+                  <span className="detail-label">Пол:</span>
+                  <span className="detail-value">{selectedPet.gender}</span>
+                </div>
+                
+                <div className="detail-item">
+                  <span className="detail-label">Возраст:</span>
+                  <span className="detail-value">{selectedPet.age}</span>
+                </div>
+                
+                <div className="detail-item">
+                  <span className="detail-label">Здоровье:</span>
+                  <span className="detail-value">{selectedPet.health}</span>
+                </div>
+                
+                <div className="detail-item">
+                  <span className="detail-label">Стерилизован:</span>
+                  <span className="detail-value">{selectedPet.sterilized ? "Да" : "Нет"}</span>
+                </div>
+                
+                <div className="detail-item">
+                  <span className="detail-label">Приучен к лотку:</span>
+                  <span className="detail-value">{selectedPet.tray ? "Да" : "Нет"}</span>
+                </div>
+              </div>
+              
+              <div className="pet-description">
+                <h4>Описание:</h4>
+                <p>{selectedPet.description}</p>
+              </div>
+              
+              <div className="modal-actions">
+                <div style={{marginRight:'10vw', marginBottom:'1vw'}}><PhoneModal /></div>
+              
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
     </div>
   </div>
-  <button className="look_more" onClick={toggleShowPets}>
-          {showAllPets ? 'Скрыть' : 'Показать больше'}
-        </button>
-</div>
-</div>
+)}
 
 
       <div style={{display: 'flex', justifyContent: 'center', alignItems: 'center'}}>
@@ -110,7 +318,6 @@ function App() {
           <span className="four">Приезжай знакомиться</span>
           <span className="five">Подготовься к новоселью</span>
           <span className="six">Привези нового друга домой</span>
-          {/* <button className="call_now" onclick="showPhoneModal()">Позвони уже сейчас</button> */}
                <PhoneModal />
         </div> 
       </div>
@@ -246,7 +453,7 @@ function App() {
 
       <div style={{display: 'flex', justifyContent: 'center', alignItems: 'center'}} id="href_number">
         <div className="pink"></div>
-        <img src={pets} className="pets"/>
+        <img src={pinkpets} className="pets"/>
         <span className="your"><b>Ваш вклад спасает жизни – не откладывайте добро на потом!</b></span>
 
         <div className='CardBloop'>
