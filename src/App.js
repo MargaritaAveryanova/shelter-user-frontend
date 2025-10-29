@@ -2,6 +2,7 @@ import React, { useState, useEffect} from 'react';
 
 import YandexMapContainer from './components/YandexMapContainer'; 
 import PhoneModal from './components/PhoneModal'; 
+import CallCurator from './components/CallCurator';
 
 import Blob from './components/Blob'; 
 import BiegeShape from './components/BiegeShape';
@@ -86,109 +87,33 @@ function App() {
       </div>
 
 
-      {/* КАРТОЧКИ ЖИВОТНЫХ ИЗ БД */}
+{/* КАРТОЧКИ ЖИВОТНЫХ ИЗ БД */}
 <div className="pats" style={{textAlign:"center"}}>
   <div className="container">
-    {/* Для больших экранов (≥576px) - 2 строки по 4 карточки */}
-    <div className="d-none d-sm-block">
-      {/* Первая строка карточек - всегда видна */}
-      <div className="row justify-content-center" style={{paddingRight:"0px"}}>
-        {pets.slice(0, 4).map((pet, index) => (
-          <div key={pet.id || index} className="col-6 col-sm-3 text-center" style={{padding:"0px"}}>
-            <div className="pet-card" onClick={() => handlePetClick(pet)}>
-              <img src={pet.photo} alt={pet.name} className="pet" />
-              <div className="pet-info">
-                <h5 style={{margin:'0'}}>{pet.name}</h5>
-                <p style={{margin:'0'}}>{pet.gender}</p>
-                <p style={{margin:'0'}}>{pet.age}</p>
-              </div>
+    {/* Для всех экранов - адаптивная сетка */}
+    <div className="row justify-content-center" style={{paddingRight:"0px"}}>
+      {pets.slice(0, showAllPets ? pets.length : 8).map((pet, index) => (
+        <div 
+          key={pet.id || index} 
+          className="col-6 col-md-4 col-lg-3 text-center" 
+          style={{padding:"0px", marginBottom: "20px"}}
+        >
+          <div className="pet-card" onClick={() => handlePetClick(pet)}>
+            <img src={pet.photo} alt={pet.name} className="pet" />
+            <div className='pet-info'>
+              <h5 style={{margin:'0'}}>{pet.name}</h5>
+              <p style={{margin:'0'}}>{pet.gender}</p>
+              <p style={{margin:'0'}}>{pet.age}</p>
             </div>
+              
+            
           </div>
-        ))}
-      </div>
-
-      {/* Вторая строка карточек - скрывается если не нажата кнопка "Показать больше" */}
-        <div className="row justify-content-center" style={{paddingRight:"0px"}}>
-          {pets.slice(4, 8).map((pet, index) => (
-            <div key={pet.id || index + 4} className="col-6 col-sm-3 text-center" style={{padding:"0px"}}>
-              <div className="pet-card" onClick={() => handlePetClick(pet)}>
-                <img src={pet.photo} alt={pet.name} className="pet" />
-                <div className="pet-info">
-                  <h5 style={{margin:'0'}}>{pet.name}</h5>
-                  <p style={{margin:'0'}}>{pet.gender}</p>
-                  <p style={{margin:'0'}}>{pet.age}</p>
-                </div>
-              </div>
-            </div>
-          ))}
         </div>
-
-      {/* Дополнительные строки для всех животных когда нажата кнопка "Показать больше" */}
-      {showAllPets && pets.length > 8 && (
-        <>
-          {Array.from({ length: Math.ceil((pets.length - 8) / 4) }).map((_, rowIndex) => (
-            <div key={rowIndex} className="row justify-content-center" style={{paddingRight:"0px"}}>
-              {pets.slice(8 + rowIndex * 4, 8 + (rowIndex + 1) * 4).map((pet, index) => (
-                <div key={pet.id || 8 + rowIndex * 4 + index} className="col-6 col-sm-3 text-center" style={{padding:"0px"}}>
-                  <div className="pet-card" onClick={() => handlePetClick(pet)}>
-                    <img src={pet.photo} alt={pet.name} className="pet" />
-                    <div className="pet-info">
-                      <h5 style={{margin:'0'}}>{pet.name}</h5>
-                      <p style={{margin:'0'}}>{pet.gender}</p>
-                      <p style={{margin:'0'}}>{pet.age}</p>
-                    </div>
-                  </div>
-                </div>
-              ))}
-            </div>
-          ))}
-        </>
-      )}
-    </div>
-
-    {/* Для мобильных экранов (<576px) - 1 строка из 4 карточек */}
-    <div className="d-block d-sm-none">
-      {/* Первая строка карточек - всегда видна */}
-      <div className="row justify-content-center" style={{paddingRight:"0px"}}>
-        {pets.slice(0, 4).map((pet, index) => (
-          <div key={pet.id || index} className="col-6 text-center" style={{padding:"0px"}}>
-            <div className="pet-card" onClick={() => handlePetClick(pet)}>
-              <img src={pet.photo} alt={pet.name} className="pet" />
-              <div className="pet-info">
-                <h5 style={{margin:'0'}}>{pet.name}</h5>
-                <p style={{margin:'0'}}>{pet.gender}</p>
-                <p style={{margin:'0'}}>{pet.age}</p>
-              </div>
-            </div>
-          </div>
-        ))}
-      </div>
-
-      {/* Остальные карточки показываются только при нажатии "Показать больше" */}
-      {showAllPets && pets.length > 4 && (
-        <>
-          {Array.from({ length: Math.ceil((pets.length - 4) / 4) }).map((_, rowIndex) => (
-            <div key={rowIndex} className="row justify-content-center" style={{paddingRight:"0px"}}>
-              {pets.slice(4 + rowIndex * 4, 4 + (rowIndex + 1) * 4).map((pet, index) => (
-                <div key={pet.id || 4 + rowIndex * 4 + index} className="col-6 text-center" style={{padding:"0px"}}>
-                  <div className="pet-card" onClick={() => handlePetClick(pet)}>
-                    <img src={pet.photo} alt={pet.name} className="pet" />
-                    <div className="pet-info">
-                      <h5 style={{margin:'0'}}>{pet.name}</h5>
-                      <p style={{margin:'0'}}>{pet.gender}</p>
-                      <p style={{margin:'0'}}>{pet.age}</p>
-                    </div>
-                  </div>
-                </div>
-              ))}
-            </div>
-          ))}
-        </>
-      )}
+      ))}
     </div>
 
     {/* Кнопка "Показать больше/Скрыть" */}
-    {pets.length > 4 && (
+    {pets.length > 8 && (
       <button className="look_more" onClick={toggleShowPets}>
         {showAllPets ? 'Скрыть' : 'Показать больше'}
       </button>
@@ -208,6 +133,7 @@ function App() {
           <div className="modal-pet-layout-horizontal">
             <div className="modal-pet-image-side">
               <img src={selectedPet.photo} alt={selectedPet.name} />
+              <div ><CallCurator /></div>
             </div>
             
             <div className="modal-pet-details-side">
@@ -245,9 +171,9 @@ function App() {
                 <p>{selectedPet.description}</p>
               </div>
               
-              <div className="modal-actions">
+              <div className="modal-actions" >
 
-                <div style={{marginRight:'145vw', marginTop:'-2vw'}}><PhoneModal /></div>
+                
               </div>
             </div>
           </div>
@@ -291,12 +217,12 @@ function App() {
               </div>
               
               <div className="pet-description">
-                <h4>Описание:</h4>
+                <h4>Описание характера питомца:</h4>
                 <p>{selectedPet.description}</p>
               </div>
               
               <div className="modal-actions">
-                <div style={{marginRight:'10vw', marginBottom:'1vw'}}><PhoneModal /></div>
+                <CallCurator />
               
               </div>
             </div>
