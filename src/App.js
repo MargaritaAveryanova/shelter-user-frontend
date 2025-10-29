@@ -89,9 +89,9 @@ function App() {
 
 {/* КАРТОЧКИ ЖИВОТНЫХ ИЗ БД */}
 <div className="pats" style={{textAlign:"center"}}>
-  <div className="container">
+  <div className="container ">
     {/* Для всех экранов - адаптивная сетка */}
-    <div className="row justify-content-center" style={{paddingRight:"0px"}}>
+    <div className="row justify-content-center text-center" style={{paddingRight:"0px"}}>
       {pets.slice(0, showAllPets ? pets.length : 8).map((pet, index) => (
         <div 
           key={pet.id || index} 
@@ -150,10 +150,7 @@ function App() {
                   <span className="detail-value">{selectedPet.age}</span>
                 </div>
                 
-                <div className="detail-item">
-                  <span className="detail-label">Здоровье:</span>
-                  <span className="detail-value">{selectedPet.health}</span>
-                </div>
+                
                 
                 <div className="detail-item">
                   <span className="detail-label">Стерилизован:</span>
@@ -165,9 +162,15 @@ function App() {
                   <span className="detail-value">{selectedPet.tray ? "Да" : "Нет"}</span>
                 </div>
               </div>
+
+              <div className="detail-item">
+                  <span className="detail-label">Здоровье:</span>
+                  <span className="detail-value">{selectedPet.health}</span>
+                </div>
+
               
               <div className="pet-description">
-                <h4>Описание:</h4>
+                <h4>Описание характера питомца:</h4>
                 <p>{selectedPet.description}</p>
               </div>
               
@@ -200,10 +203,7 @@ function App() {
                   <span className="detail-value">{selectedPet.age}</span>
                 </div>
                 
-                <div className="detail-item">
-                  <span className="detail-label">Здоровье:</span>
-                  <span className="detail-value">{selectedPet.health}</span>
-                </div>
+
                 
                 <div className="detail-item">
                   <span className="detail-label">Стерилизован:</span>
@@ -215,6 +215,11 @@ function App() {
                   <span className="detail-value">{selectedPet.tray ? "Да" : "Нет"}</span>
                 </div>
               </div>
+
+              <div className="detail-item">
+                  <span className="detail-label">Здоровье:</span>
+                  <span className="detail-value">{selectedPet.health}</span>
+                </div>
               
               <div className="pet-description">
                 <h4>Описание характера питомца:</h4>

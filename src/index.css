@@ -268,13 +268,20 @@ height: 35vw;
   position: relative;
   cursor: pointer;
   transition: transform 0.3s ease;
-  margin-bottom: 15px;
+  
+
+  @media (min-width: 768px) {
+    margin-bottom: 15px;
   background-color: #FCDEC2;
   border-radius: 2vw;
   width: 19vw;
   margin: auto;
+  }
+  @media (max-width: 767px) {
+    width: 35vw;
+  }
 
-  
+
 }
 
 .pet-card:hover {
@@ -290,8 +297,9 @@ height: 35vw;
     /* margin-top: 0.7vw; */
   }
   @media (max-width: 767px) {
-    height: 50vw;
-    width: 42vw;
+    height: 45vw;
+    width: 35vw;
+    /* margin-left: 2vw; */
     /* margin-top: 3vw; */
   }
 }
@@ -308,7 +316,7 @@ height: 35vw;
   }
   @media (max-width: 767px) {
     font-size: 2.5vw;
-    width: 42vw;
+    width: 35vw;
 
   }
 
@@ -437,7 +445,7 @@ height: 35vw;
 .pet-description {
   margin: 2vw 0;
   padding: 2vw;
-  background: #f8f9fa;
+  background: #fcdec2;
   border-radius: 10px;
 
 }
@@ -477,7 +485,7 @@ height: 35vw;
   display: flex;
   justify-content: space-between;
   padding: 1vw 2vw;
-  background: #f8f9fa;
+  background: #fcdec2;
   border-radius: 8px;
 }
 
