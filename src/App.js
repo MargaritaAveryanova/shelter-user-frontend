@@ -3,6 +3,8 @@ import React, { useState, useEffect} from 'react';
 import YandexMapContainer from './components/YandexMapContainer'; 
 import PhoneModal from './components/PhoneModal'; 
 import CallCurator from './components/CallCurator';
+import Carousel from './components/Carousel';
+
 
 import Blob from './components/Blob'; 
 import BiegeShape from './components/BiegeShape';
@@ -96,7 +98,9 @@ function App() {
         <div 
           key={pet.id || index} 
           className="col-6 col-md-4 col-lg-3 text-center" 
-          style={{padding:"0px", marginBottom: "20px"}}
+          style={{padding:"0px", marginBottom: "20px",
+            display: "flex",
+            justifyContent: "center"}}
         >
           <div className="pet-card" onClick={() => handlePetClick(pet)}>
             <img src={pet.photo} alt={pet.name} className="pet" />
@@ -123,7 +127,7 @@ function App() {
 
       {/* Модальное окно с детальной информацией о питомце */}
 {showPetModal && selectedPet && (
-  <div className="modal-overlay" onClick={closePetModal}>
+  <div className="modal-overlay" onClick={closePetModal} >
     <div className="modal-content pet-modal" onClick={(e) => e.stopPropagation()}>
       <button className="modal-close-btn" onClick={closePetModal}>×</button>
       
@@ -379,10 +383,13 @@ function App() {
 
       {/* НОВОСТИ */}
       <div style={{display: 'flex', justifyContent: 'center', alignItems: 'center'}}>
-        <span className="dream_home">ПОСЛЕДНИЕ НОВОСТИ И СОБЫТИЯ</span>
+        <Carousel />
+        
       </div>
 
-      <div style={{display: 'flex', justifyContent: 'center', alignItems: 'center'}} id="href_number">
+      {/* КОНТАКТЫ ДЛЯ ПЕРЕВОДОВ */}
+
+      <div style={{display: 'flex', justifyContent: 'center', alignItems: 'center', marginTop:'3vw'}} id="href_number">
         <div className="pink"></div>
         <img src={pinkpets} className="pets"/>
         <span className="your"><b>Ваш вклад спасает жизни – не откладывайте добро на потом!</b></span>
