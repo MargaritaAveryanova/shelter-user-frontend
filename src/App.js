@@ -4,6 +4,7 @@ import YandexMapContainer from './components/YandexMapContainer';
 import PhoneModal from './components/PhoneModal'; 
 import CallCurator from './components/CallCurator';
 import Carousel from './components/Carousel';
+import Instruction from './components/Instruction';
 
 
 import Blob from './components/Blob'; 
@@ -413,7 +414,11 @@ function App() {
           </svg>
         </div>
         
-        <span className="KN"><b>Добрые телефоны</b></span>
+        <span className="KN"><b>Инструкция для благотворителей</b></span>
+        <span className="th">Спасибо, что хотите помочь!</span>
+        {/* <button className='manual'>Прочитать инструкцию</button> */}
+        <Instruction/>
+        
       </div>
 
       <YandexMapContainer />
