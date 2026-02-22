@@ -271,7 +271,7 @@ height: 35vw;
   
 
   @media (min-width: 768px) {
-    margin-bottom: 15px;
+  margin-bottom: 15px;
   background-color: #FCDEC2;
   border-radius: 2vw;
   width: 19vw;
@@ -403,10 +403,12 @@ height: 35vw;
 
 /* Адаптивность модального окна */
 @media (max-width: 768px) {
-  .modal-content.pet-modal {
+  .modal-content_pet.pet-modal {
     width: 100vw;
     max-height: 95%;
     overflow-y: auto;
+    background-color: #FFEDE1;
+    border-radius: 10px;
   }
   
   .pet-details-grid {
@@ -415,11 +417,12 @@ height: 35vw;
 }
 
 @media (min-width: 769px) {
-  .modal-content.pet-modal {
+  .modal-content_pet.pet-modal {
     width: 75vw;
     height: 95%;
     padding: 20px;
-    
+    background-color: #FFEDE1;
+    border-radius: 20px;
   }
 }
 
@@ -535,6 +538,7 @@ height: 35vw;
   background-color: #FCDEC2;
   border: none;
   border-radius: 20px;
+  margin: auto;
   @media (min-width: 768px) {
     font-size: 1.8vw;
     margin-top: 2vw;
@@ -672,7 +676,7 @@ height: 35vw;
   box-shadow: 1vw 1vw 20px 0.1vw #00000026;
 }
 
-.modal-overlay {
+.modal-overlay_phone {
   position: fixed;
   top: 0;
   left: 0;
@@ -685,7 +689,7 @@ height: 35vw;
   z-index: 1000;
 }
 
-.modal-content {
+.modal-content_phone {
   /* background: #FFEDE1; */
   background: #FEF9F3;
   padding: 30px;
@@ -1258,7 +1262,7 @@ height: 35vw;
 }
 
 /* Стили для модального окна */
-.modal-overlay {
+.modal-overlay_carousel {
   position: fixed;
   top: 0;
   left: 0;
@@ -1272,7 +1276,7 @@ height: 35vw;
   padding: 20px;
 }
 
-.modal-content {
+.modal-content_carousel {
   background: white;
   border-radius: 12px;
   max-width: 90vw;
@@ -1426,8 +1430,8 @@ height: 35vw;
 
 .modal-close-btn {
   padding: 10px 24px;
-  background-color: #007bff;
-  color: white;
+  background-color: #007bff00;
+  color: rgb(0, 0, 0);
   border: none;
   border-radius: 6px;
   cursor: pointer;
@@ -1436,7 +1440,7 @@ height: 35vw;
 }
 
 .modal-close-btn:hover {
-  background-color: #0056b3;
+  background-color: #0057b300;
 }
 
 /* Анимация появления модального окна */
@@ -1614,6 +1618,36 @@ height: 35vw;
   }
 }
 
+.account-number{
+  position: absolute;
+  @media (min-width: 768px) {
+    margin-left: -50.5vw;
+    margin-top: 7.8vw;
+    font-size: 1.5vw;
+  }
+  @media (max-width: 767px) {
+    margin-left: -70vw;
+    margin-top: -6.4vw;
+    font-size: 3.5vw;
+  }
+}
+
+.card-number
+{
+  position: absolute;
+  border: none;
+  @media (min-width: 768px) {
+    margin-left: -49.5vw;
+    margin-top: 5.3vw;
+    font-size: 1.5vw;
+  }
+  @media (max-width: 767px) {
+    margin-left: -69vw;
+    margin-top: -12vw;
+    font-size: 3.5vw;
+  }
+}
+
 .KN{
   position: absolute;
   
@@ -1672,7 +1706,12 @@ height: 35vw;
 
 .modal-content{
   background: linear-gradient(0deg, #E8B0AF, #FDDAD8, #FDDAD8, #E8B0AF);
-  /* padding: 2vw 13vw 0 13vw; */
+  padding: 0;
+  overflow-y: auto;
+  display: flex;
+  flex-direction: column;
+  min-height: 400px; /* или нужная высота */
+  position: relative;
   @media (min-width: 768px) {
     height: 95%;
     width: 60%;
@@ -1683,35 +1722,57 @@ height: 35vw;
   }
 }
 
+.modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgba(0, 0, 0, 0.7);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1000;
+  padding: 20px;
+}
+
+
+
 .dog1_1{
   position: absolute;
   @media (min-width: 768px) {
     height: 25vw;
     width: 10vw;
-    margin-left: 44.7vw;
-    margin-top: 20vw;
+    /* margin-left: 44.7vw; */
+    align-self: flex-end;
+    margin-top: 25vw;
   }
   @media (max-width: 767px) {
     height: 55vw;
     width: 25vw;
-    margin-left: 56vw;
+    /* margin-left: 56vw; */
+    align-self: flex-end;
     margin-top: 105vw;
   }
 }
 
 .dog1_2{
   position: absolute;
+  
   @media (min-width: 768px) {
     height: 18vw;
-    width: 17vw;
-    margin-left: -1vw;
-    margin-top: 38vw;
+    width: 18vw;
+    margin-left: 0vw;
+    margin-top: 45vw;
+    
   }
   @media (max-width: 767px) {
     height: 38vw;
     width: 38vw;
     margin-left: -6vw;
     margin-top: 185vw;
+    /* bottom: 0;
+    align-self: flex-end; */
   }
 }
 
@@ -1720,13 +1781,15 @@ height: 35vw;
   @media (min-width: 768px) {
     height: 22vw;
     width: 12vw;
-    margin-left: -2.4vw;
-    margin-top: 3vw;
+    /* margin-left: -2.4vw; */
+    align-self: flex-start;
+    margin-top: 7vw;
   }
   @media (max-width: 767px) {
     height: 50vw;
     width: 25vw;
-    margin-left: -4.4vw;
+    /* margin-left: -4.4vw; */
+
     margin-top: 23vw;
   }
 }
@@ -1734,7 +1797,9 @@ height: 35vw;
 .f1{
   
   @media (min-width: 768px) {
+    text-align: center;
     font-size: 2.2vw;
+    margin-top: 3vw;
 
   }
   @media (max-width: 767px) {
@@ -1750,47 +1815,51 @@ height: 35vw;
 @media (min-width: 768px) {
   font-size: 1.4vw;
   width: 40vw;
+  margin-right: 3vw;
 
 }
 @media (max-width: 767px) {
   font-size: 3.5vw; 
   width: 55vw;
+  margin-right: 3vw;
+
 }
 }
 
-
-
-
   
-  .instruction-section_2{
-  text-align: left;
-  
-  align-self: flex-start;
-  @media (min-width: 768px) {
-    font-size: 1.4vw;
-    width: 40vw;
-  }
-  @media (max-width: 767px) {
-    font-size: 3.5vw; 
-    width: 60vw;
-  }
-  }
+.instruction-section_2{
+text-align: left;
+
+align-self: flex-start;
+@media (min-width: 768px) {
+  font-size: 1.4vw;
+  width: 40vw;
+  margin-left: 3vw;
+}
+@media (max-width: 767px) {
+  font-size: 3.5vw; 
+  width: 60vw;
+  margin-left: 3vw;
+
+}
+}
 
 
 .instruction-section_3{
-  text-align: left;
-  
-  align-self: flex-end;
-
-    @media (min-width: 768px) {
-    font-size: 1.4vw;
-width: 35vw;
-  }
+text-align: left;
+align-self: flex-end;
+  @media (min-width: 768px) {
+  font-size: 1.4vw;
+  width: 35vw;
+  margin-right: 3vw;
+}
   @media (max-width: 767px) {
     font-size: 3.5vw; 
     width: 45vw;
+  margin-right: 3vw;
+
   }
-  }
+}
 
 
 .donation-text{

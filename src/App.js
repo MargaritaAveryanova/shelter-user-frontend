@@ -5,6 +5,7 @@ import PhoneModal from './components/PhoneModal';
 import CallCurator from './components/CallCurator';
 import Carousel from './components/Carousel';
 import Instruction from './components/Instruction';
+import BankAndPhone from './components/BankAndPhone';
 
 
 import Blob from './components/Blob'; 
@@ -129,7 +130,7 @@ function App() {
       {/* Модальное окно с детальной информацией о питомце */}
 {showPetModal && selectedPet && (
   <div className="modal-overlay" onClick={closePetModal} >
-    <div className="modal-content pet-modal" onClick={(e) => e.stopPropagation()}>
+    <div className="modal-content_pet pet-modal" onClick={(e) => e.stopPropagation()}>
       <button className="modal-close-btn" onClick={closePetModal}>×</button>
       
       <div className="modal-pet-container">
@@ -154,9 +155,7 @@ function App() {
                   <span className="detail-label">Возраст:</span>
                   <span className="detail-value">{selectedPet.age}</span>
                 </div>
-                
-                
-                
+
                 <div className="detail-item">
                   <span className="detail-label">Стерилизован:</span>
                   <span className="detail-value">{selectedPet.sterilized ? "Да" : "Нет"}</span>
@@ -403,10 +402,12 @@ function App() {
         
 
         <span className="hN"><b>Номера счетов</b></span>
-        {/* <div className="cart"> */}
+
           <p className='cart'>Карта:</p>
           <p className='cart2'>Счёт:</p>
-        {/* </div> */}
+
+
+        <BankAndPhone/>
         
         <div className='NBloop'>
           <svg viewBox="0 0 600 220" fill="none" xmlns="http://www.w3.org/2000/svg">

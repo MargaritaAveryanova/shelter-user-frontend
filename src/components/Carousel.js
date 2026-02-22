@@ -215,8 +215,8 @@ const Carousel = () => {
 
       {/* Модальное окно */}
       {isModalOpen && selectedNews && (
-        <div className="modal-overlay" onClick={handleOverlayClick}>
-          <div className="modal-content">
+        <div className="modal-overlay_carousel" onClick={handleOverlayClick}>
+          <div className="modal-content_carousel">
             <button className="modal-close" onClick={closeModal}>
               ×
             </button>

@@ -52,8 +52,8 @@ const PhoneModal = () => {
         </button>
   
         {isModalOpen && (
-          <div className="modal-overlay" onClick={handleOverlayClick}>
-            <div className="modal-content">
+          <div className="modal-overlay_phone" onClick={handleOverlayClick}>
+            <div className="modal-content_phone">
               <button className="close-button" onClick={closeModal}>&times;</button>
               <h3>Контактный номер</h3>
               <div className="phone-number" onClick={handlePhoneClick}>
