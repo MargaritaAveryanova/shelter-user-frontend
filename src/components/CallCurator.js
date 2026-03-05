@@ -46,14 +46,14 @@ const CallCurator = () => {
     }, [isModalOpen]);
   
     return (
-      <div>
+      <div className='call_now-button'>
         <button className="call_curator" onClick={openModal}>
           Позвони уже сейчас
         </button>
   
         {isModalOpen && (
           <div className="modal-overlay" onClick={handleOverlayClick}>
-            <div className="modal-content">
+            <div className="modal-content_phone">
               <button className="close-button" onClick={closeModal}>&times;</button>
               <h3>Контактный номер</h3>
               <div className="phone-number" onClick={handlePhoneClick}>

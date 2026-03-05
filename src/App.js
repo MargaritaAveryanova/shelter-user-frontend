@@ -131,15 +131,15 @@ function App() {
 {showPetModal && selectedPet && (
   <div className="modal-overlay" onClick={closePetModal} >
     <div className="modal-content_pet pet-modal" onClick={(e) => e.stopPropagation()}>
-      <button className="modal-close-btn" onClick={closePetModal}>×</button>
+      <button className="modal-close-btn" style={{fontSize: "35px"}} onClick={closePetModal}>×</button>
       
       <div className="modal-pet-container">
         {/* Для больших экранов - картинка слева, контент справа */}
         <div className="d-none d-md-block">
           <div className="modal-pet-layout-horizontal">
-            <div className="modal-pet-image-side">
-              <img src={selectedPet.photo} alt={selectedPet.name} />
-              <div ><CallCurator /></div>
+            <div className="modal-pet-image-side" >
+              <img  src={selectedPet.photo} alt={selectedPet.name} />
+              
             </div>
             
             <div className="modal-pet-details-side">
@@ -147,39 +147,39 @@ function App() {
               
               <div className="pet-details-grid">
                 <div className="detail-item">
-                  <span className="detail-label">Пол:</span>
+                  
                   <span className="detail-value">{selectedPet.gender}</span>
                 </div>
                 
                 <div className="detail-item">
-                  <span className="detail-label">Возраст:</span>
+                  
                   <span className="detail-value">{selectedPet.age}</span>
                 </div>
 
                 <div className="detail-item">
-                  <span className="detail-label">Стерилизован:</span>
-                  <span className="detail-value">{selectedPet.sterilized ? "Да" : "Нет"}</span>
+                  
+                  <span className="detail-value">{selectedPet.sterilized ? "Стерелизован" : "Не стерелизован"}</span>
                 </div>
                 
                 <div className="detail-item">
-                  <span className="detail-label">Приучен к лотку:</span>
-                  <span className="detail-value">{selectedPet.tray ? "Да" : "Нет"}</span>
+                  
+                  <span className="detail-value">{selectedPet.tray ? "Приучен к лотку" : "Не приучен к лотку"}</span>
                 </div>
               </div>
 
-              <div className="detail-item">
-                  <span className="detail-label">Здоровье:</span>
-                  <span className="detail-value">{selectedPet.health}</span>
+              <div className="detail-item-health">
+                  <h4 ><b>Здоровье</b></h4>
+                  <p >{selectedPet.health}</p>
                 </div>
 
               
               <div className="pet-description">
-                <h4>Описание характера питомца:</h4>
+                <h4><b>Описание</b></h4>
                 <p>{selectedPet.description}</p>
               </div>
               
               <div className="modal-actions" >
-
+                  <CallCurator />
                 
               </div>
             </div>
@@ -198,39 +198,39 @@ function App() {
               
               <div className="pet-details-grid">
                 <div className="detail-item">
-                  <span className="detail-label">Пол:</span>
+                  
                   <span className="detail-value">{selectedPet.gender}</span>
                 </div>
                 
                 <div className="detail-item">
-                  <span className="detail-label">Возраст:</span>
+                  
                   <span className="detail-value">{selectedPet.age}</span>
                 </div>
                 
 
                 
                 <div className="detail-item">
-                  <span className="detail-label">Стерилизован:</span>
-                  <span className="detail-value">{selectedPet.sterilized ? "Да" : "Нет"}</span>
+                  
+                  <span className="detail-value">{selectedPet.sterilized ? "Стерелизован" : "Не стерилизован"}</span>
                 </div>
                 
                 <div className="detail-item">
-                  <span className="detail-label">Приучен к лотку:</span>
-                  <span className="detail-value">{selectedPet.tray ? "Да" : "Нет"}</span>
+                
+                  <span className="detail-value">{selectedPet.tray ? "Приучен к лотку" : "Не приучен к лотку"}</span>
                 </div>
               </div>
 
-              <div className="detail-item">
-                  <span className="detail-label">Здоровье:</span>
-                  <span className="detail-value">{selectedPet.health}</span>
+              <div className="detail-item-health">
+                  <h4 className="detail-label"><b>Здоровье</b></h4>
+                  <p className="detail-value">{selectedPet.health}</p>
                 </div>
               
               <div className="pet-description">
-                <h4>Описание характера питомца:</h4>
+                <h4><b>Описание</b></h4>
                 <p>{selectedPet.description}</p>
               </div>
               
-              <div className="modal-actions">
+              <div className="modal-actions" style={{marginLeft:"2vw"}}>
                 <CallCurator />
               
               </div>
