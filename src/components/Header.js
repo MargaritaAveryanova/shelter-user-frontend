@@ -5,7 +5,6 @@ export default function header() {
     <header>
         <div className='container-fluid text-center'>
             <div className='row justify-content-sm-end flex-nowrap justify-content-center overflow-auto hed' style={{paddingRight:"0px"}}>
-              <a className='col-auto text-nowrap'>О нас</a>
               <a className='col-auto text-nowrap' href='#dream'>Мечтают о доме</a>
               <a className='col-auto text-nowrap' href='#href_help'>Как помочь</a>
               <a className='col-auto text-nowrap' href='#href_number'>Контакты</a>

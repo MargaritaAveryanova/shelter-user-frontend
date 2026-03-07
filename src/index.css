@@ -2,24 +2,63 @@
 * {
     margin: 0;
     padding: 0;
+    color: var(--text-color);
 }
 
+:root {
+  /* Основные цвета сайта */
+  --bg-color: #FEF9F3;
+  --biege-block: #FCDEC2;
+  --white-block: #fff;
+  --primary-pink: #E8B0AF;
+  --primary-light-pink: #FFE6E7;
+  --modal-content-pat: #FFEDE1;
+  --primary-blue: #CAEAFD;
+  --text-color: #333333;
+  --shadow-color: #00000026;
+  --black: #000;
+  --paws: #FFCC9D;
+  --help: #4D4F50;
+  --carousel: #FFEDE1;
+  --filters: #FFD7B2;
+}
+
+/* Альтернативная цветовая схема */
+[data-theme="dark"] {
+  --bg-color: #423D3A;
+  --biege-block: #75554A;
+  --white-block: #4C403C;
+  --primary-pink: #836764;
+  --primary-light-pink: #987571;
+  --modal-content-pat: #4C403C;
+  --primary-blue: #8C9EA9;
+  --text-color: #FEF9F3;
+  --shadow-color: #00000026;
+  --black: #fff;
+  --paws: #75554A;
+  --help: #FEF9F3;
+  --carousel: #4C403C;
+  --filters: #75554A;
+}
+
+
 body{
-    background-color:#FEF9F3;
+    background-color: var(--bg-color);
     font-family: 'Comfortaa', cursive;
+    color: var(--text-color);
 }
 
 /* СКРОЛ */
 
 /* Сам трек — фон полосы прокрутки */
 ::-webkit-scrollbar-track {
-  background: #f0f0f0;
+  background: var(--bg-color);
   border-radius: 10px;
 }
 
 /* Сама полоска — бегунок */
 ::-webkit-scrollbar-thumb {
-  background: #FCDEC2;
+  background: var(--biege-block);
   border-radius: 10px;
 }
 
@@ -32,12 +71,26 @@ body{
 
 
 /* ШАПКА */
+
+.night_theme{
+  position: absolute;
+  width: 3.5vw;
+  margin-left: 1.5vw;
+  
+}
+
+.button_night_theme{
+  /* margin: 0%;
+  padding: 0%; */
+  position: absolute;
+}
+
 header{
     padding: 10px;
 }
 
 .col-auto{
-    color: black;
+    color: var(--text-color);
     text-decoration: none;
     cursor: pointer;
     @media (min-width: 768px) {
@@ -113,7 +166,7 @@ height: 35vw;
 /* ПЕРВЫЕ БЛОКИ С СОБАКАМИ */
 
 .blue_block{
-  background-color:#CAEAFD;
+  background-color:var(--primary-blue);
   @media (min-width: 768px) {
     height: 30vw;
     width: 37vw;
@@ -131,7 +184,7 @@ height: 35vw;
 }
 
 .white_block{
-  background-color:#fff;
+  background-color: var(--white-block);
   position: absolute;
   @media (min-width: 768px) {
     font-size: 1.3vw;
@@ -195,7 +248,7 @@ height: 35vw;
 }
 
 .biege_block{
-  background-color: #FCDEC2;
+  background-color: var(--biege-block);
   position: absolute;
   box-shadow: 1vw 1vw 20px 1px #000000b7;
   @media (min-width: 768px) {
@@ -212,6 +265,10 @@ height: 35vw;
     margin-bottom: 30vw;
     margin-left: 36vw;
   }
+}
+
+.bieges{
+  margin-top: 1vw;
 }
 
 
@@ -272,7 +329,7 @@ height: 35vw;
 
   @media (min-width: 768px) {
   margin-bottom: 15px;
-  background-color: #FCDEC2;
+  background-color: var(--biege-block);
   border-radius: 2vw;
   width: 19vw;
   margin: auto;
@@ -301,7 +358,7 @@ height: 35vw;
 }
 
 .pet-info {
-  background: #FCDEC2;
+  background: var(--biege-block);
   border-radius: 0 0 2vw 2vw;
   
   
@@ -320,13 +377,13 @@ height: 35vw;
 
 .pet-info h5 {
   margin: 0;
-  color: #333;
+  color: var(--text-color);
   font-size: 1.5em;
 }
 
 .pet-info p {
   margin: 5px 0 0 0;
-  color: #666;
+  color: var(--text-color);
   @media (min-width: 768px) {
   font-size: 1em;
   }
@@ -338,10 +395,10 @@ height: 35vw;
 .modal-close-btn{
   
   @media (min-width: 768px) {
-      margin-left: 66vw;
+      margin-left: 68vw;
   }
   @media (max-width: 767px) {
-      margin-left: 75vw;
+      margin-left: 79vw;
   }
 }
 
@@ -419,7 +476,7 @@ height: 35vw;
     width: 100vw;
     max-height: 95%;
     overflow-y: auto;
-    background-color: #FFEDE1;
+    background-color: var(--modal-content-pat);
     border-radius: 10px;
   }
   
@@ -433,7 +490,7 @@ height: 35vw;
     width: 77%;
     height: 95vh;
     /* padding: 20px; */
-    background-color: #FFEDE1;
+    background-color: var(--modal-content-pat);
     border-radius: 20px;
   }
 }
@@ -472,7 +529,7 @@ height: 35vw;
 }
 
 .detail-item-health h4{
-  color: #333;
+  color: var(--text-color);
   margin-bottom: 5px;
   @media (min-width: 768px) {
   font-size: 1.6vw;
@@ -510,7 +567,7 @@ height: 35vw;
 }
 
 .pet-description h4 {
-  color: #333;
+  color: var(--text-color);
   margin-bottom: 5px;
   @media (min-width: 768px) {
   font-size: 1.6vw;
@@ -552,12 +609,12 @@ height: 35vw;
   display: flex;
   justify-content: center;
   /* padding: 1vw 1vw; */
-  background: #FFD7B2;
+  background: var(--filters);
   border-radius: 20px;
   padding: 0.3vw 0;
   }
   @media (max-width: 767px) {
-  background: #FFD7B2;
+  background: var(--filters);
   border-radius: 20px;
   justify-content: center;
   display: flex;
@@ -581,7 +638,7 @@ height: 35vw;
 }
 
 .detail-value {
-  color: #333;
+  color: var(--text-color);
   font-size: 1.2vw;
   @media (min-width: 768px) {
     font-size: 1.6vw;
@@ -593,7 +650,7 @@ height: 35vw;
 
 
 .look_more{
-    background-color: #FCDEC2;
+    background-color: var(--biege-block);
     border: none;
     @media (min-width: 768px) {
       font-size: 1.8vw;
@@ -612,7 +669,7 @@ height: 35vw;
 
 .call_curator{
   /* position: absolute; */
-  background-color: #FCDEC2;
+  background-color: var(--biege-block);
   border: none;
   border-radius: 20px;
   margin: auto;
@@ -647,7 +704,7 @@ height: 35vw;
 /* ПОЕДЕМ ДОМОЙ */
 
 .come_home{
-  background-color:#FFEDE1;
+  background-color:var(--modal-content-pat);
   @media (min-width: 768px) {
     height: 35vw;
   width: 60vw;
@@ -748,7 +805,7 @@ height: 35vw;
 
 .call_now{
   position: absolute;
-  background-color: #FCDEC2;
+  background-color: var(--biege-block);
   border: none;
   border-radius: 20px;
   @media (min-width: 768px) {
@@ -781,7 +838,7 @@ height: 35vw;
 
 .modal-content_phone {
   /* background: #FFEDE1; */
-  background: #FEF9F3;
+  background: var(--bg-color);
   padding: 30px;
   border-radius: 10px;
   text-align: center;
@@ -797,7 +854,7 @@ height: 35vw;
   right: 15px;
   font-size: 24px;
   cursor: pointer;
-  color: #666;
+  color: var(--text-color);
   background: none;
   border: none;
   width: 30px;
@@ -821,10 +878,10 @@ height: 35vw;
 .phone-number {
   font-size: 24px;
   font-weight: bold;
-  color: #000000;
+  color: var(--black);
   margin: 20px 0;
   padding: 10px;
-  border: 2px dashed #000000;
+  border: 2px dashed var(--black);
   border-radius: 5px;
   cursor: pointer;
   transition: all 0.3s;
@@ -867,7 +924,7 @@ height: 35vw;
 
 .pinki{
   @media (max-width: 767px) {
-    background-color: #FFE6E7;
+    background-color: var(--primary-light-pink);
     height: 85vw;
     width: 90vw;
     margin-left: 5vw;
@@ -894,7 +951,7 @@ height: 35vw;
 
 @media (min-width: 767px) {
   .one_love, .two_love, .three_love{
-  background-color: #FFEDE1;
+  background-color: var(--modal-content-pat);
   position: absolute;
   height: 21vw;
   width: 17vw;
@@ -907,7 +964,7 @@ height: 35vw;
 
 @media (max-width: 767px) {
   .one_love, .two_love, .three_love{
-    background-color: #FFEDE1;
+    background-color: var(--modal-content-pat);
     position: absolute;
     margin-left: -5vw;
     height: 25vw;
@@ -1121,9 +1178,11 @@ height: 35vw;
 }
 
 .carousel-slide {
-  flex-shrink: 0;
-  padding: 10px;
-  box-sizing: border-box;
+  /* flex-shrink: 0; */
+  /* padding: 10px; */
+  /* box-sizing: border-box; */
+  background-color: var(--bg-color);
+  border: none;
 }
 
 .carousel-content {
@@ -1169,13 +1228,14 @@ height: 35vw;
   padding: 20px;
   flex-grow: 1;
   display: flex;
+  background-color: var(--carousel);
   flex-direction: column;
 }
 
 .carousel-item-title {
   font-size: 1.3rem;
   margin-bottom: 10px;
-  color: #333;
+  color: var(--text-color);
   font-weight: bold;
   line-height: 1.3;
   margin: auto;
@@ -1197,8 +1257,8 @@ height: 35vw;
 
 .carousel-read-more {
   align-self: flex-start;
-  background: #ff6b6b;
-  color: white;
+  background: var(--biege-block);
+  color: var(--text-color);
   border: none;
   padding: 8px 16px;
   border-radius: 20px;
@@ -1211,7 +1271,7 @@ height: 35vw;
 }
 
 .carousel-read-more:hover {
-  background: #ff5252;
+  background: var(--biege-block);
 }
 
 .carousel-btn {
@@ -1266,12 +1326,12 @@ height: 35vw;
 }
 
 .carousel-indicator.active {
-  background: #ff6b6b;
+  background: var(--biege-block);
   transform: scale(1.2);
 }
 
 .carousel-indicator:hover {
-  background: #ff6b6b;
+  background: var(--biege-block);
 }
 
 .carousel-loading {
@@ -1312,7 +1372,7 @@ height: 35vw;
   }
   
   .carousel-slide {
-    padding: 15px;
+    /* padding: 15px; */
   }
 }
 
@@ -1385,7 +1445,7 @@ height: 35vw;
   border: none;
   font-size: 24px;
   cursor: pointer;
-  color: #666;
+  color: var(--text-color);
   width: 30px;
   height: 30px;
   display: flex;
@@ -1445,6 +1505,7 @@ height: 35vw;
   display: flex;
   flex-direction: column;
   padding: 30px;
+  background-color: var(--biege-block);
 }
 
 .modal-header {
@@ -1453,7 +1514,7 @@ height: 35vw;
 
 .modal-title {
   margin: 0 0 10px 0;
-  color: #333;
+  color: var(--text-color);
   font-size: 1.4em;
   line-height: 1.3;
   font-weight: 600;
@@ -1473,7 +1534,7 @@ height: 35vw;
 
 .modal-text {
   line-height: 1.6;
-  color: #333;
+  color: var(--text-color);
 }
 
 .modal-full-description {
@@ -1596,7 +1657,7 @@ height: 35vw;
 
 
 .pink{
-  background-color: #E8B0AF;
+  background-color: var(--primary-pink);
   @media (min-width: 768px) {
     height: 20vw;
     width: 60vw;
@@ -1779,7 +1840,7 @@ height: 35vw;
 
 .manual{
   position: absolute;
-  background-color: #FCDEC2;
+  background-color: var(--biege-block);
   border: none;
   border-radius: 20px;
   box-shadow: 1vw 1vw 20px 0.1vw #00000026;
@@ -1800,7 +1861,7 @@ height: 35vw;
 }
 
 .modal-content{
-  background: linear-gradient(0deg, #E8B0AF, #FDDAD8, #FDDAD8, #E8B0AF);
+  background: var(--primary-light-pink);
   padding: 0;
   overflow-y: auto;
   display: flex;
@@ -1971,7 +2032,7 @@ align-self: flex-end;
 /* КАРТА */
 
 .biege{
-  background: #FFEDE1;
+  background: var(--modal-content-pat);
   @media (min-width: 768px) {
     width: 60vw;
     height: 40vw;
@@ -2117,7 +2178,7 @@ footer{
 
 button{
   border: none;
-  background-color: #FEF9F3;
+  background-color: var(--bg-color);
 }
 
 

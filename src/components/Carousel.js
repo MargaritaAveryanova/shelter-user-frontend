@@ -129,7 +129,7 @@ const Carousel = () => {
 
   return (
     <div className="carousel-container">
-      <h2 className="carousel-title">ПОСЛЕДНИЕ НОВОСТИ И СОБЫТИЯ</h2>
+      <h2 className="carousel-title" style={{color:"var(--black)"}}>ПОСЛЕДНИЕ НОВОСТИ И СОБЫТИЯ</h2>
       
       <div 
         className="carousel"
@@ -185,7 +185,7 @@ const Carousel = () => {
                       className="carousel-read-more"
                       onClick={() => openModal(item)}
                     >
-                      Читать подробнее
+                      <b>Читать подробнее</b>
                     </button>
                   </div>
                 </div>
