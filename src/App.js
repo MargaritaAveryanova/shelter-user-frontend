@@ -21,6 +21,11 @@ import dog3 from './img/dog3.jpg';
 import cat from './img/cat.jpg';
 import pinkpets from './img/pets.jpg';
 
+import dog1Dark from './img/dog1Dark.jpg';
+import dog3Dark from './img/dog3Dark.jpg';
+import catDark from './img/catDark.jpg';
+import pinkpetsDark from './img/petsDark.jpg';
+
 
 function App() {
   const [showAllPets, setShowAllPets] = useState(false);
@@ -40,6 +45,13 @@ function App() {
     
     setTheme(newTheme);
     document.documentElement.setAttribute('data-theme', newTheme);
+  };
+
+  const getThemeImage = (light, dark) => {
+    switch(theme) {
+      case 'dark': return dark;
+      default: return light;
+    }
   };
 
   useEffect(() => {
@@ -86,21 +98,33 @@ function App() {
   return (
     <div className="wrapper">
       <button className='button_night_theme'  onClick={toggleTheme}>
-        <svg className='night_theme' width="74" height="74" viewBox="0 0 74 74" fill="none" xmlns="http://www.w3.org/2000/svg">
-      <rect width="74" height="74" rx="37" fill="#423D3A" fill-opacity="0.6"/>
+        {theme === 'light' ? (
+    // Иконка для светлой темы (луна)
+    <svg className='night_theme' width="74" height="74" viewBox="0 0 74 74" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <rect width="74" height="74" rx="37" fill="#423D3A" fillOpacity="0.6"/>
       <path d="M56.2803 39.0001C55.9916 38.7614 55.6417 38.6087 55.2704 38.5592C54.8991 38.5097 54.5214 38.5654 54.1803 38.7201C52.0654 39.6878 49.766 40.1859 47.4403 40.1801C43.138 40.1749 39.0122 38.4689 35.9625 35.4343C32.9129 32.3996 31.1867 28.2823 31.1603 23.9801C31.1696 22.6317 31.3374 21.2892 31.6603 19.9801C31.7288 19.6311 31.7031 19.2702 31.5858 18.9346C31.4685 18.5989 31.2637 18.3006 30.9928 18.0703C30.7218 17.8401 30.3943 17.6863 30.0441 17.6247C29.6938 17.5631 29.3335 17.596 29.0003 17.7201C25.8649 19.1299 23.1394 21.3136 21.0798 24.066C19.0202 26.8185 17.694 30.0493 17.226 33.455C16.7579 36.8607 17.1633 40.3296 18.404 43.5356C19.6447 46.7416 21.6801 49.5796 24.3189 51.783C26.9576 53.9864 30.1132 55.4828 33.4892 56.1317C36.8651 56.7806 40.3506 56.5606 43.6182 55.4925C46.8858 54.4244 49.8282 52.5432 52.1691 50.0256C54.5099 47.508 56.1724 44.4366 57.0003 41.1001C57.1011 40.718 57.0865 40.3147 56.9584 39.941C56.8303 39.5672 56.5943 39.2398 56.2803 39.0001ZM37.2803 52.3801C33.9238 52.3564 30.6567 51.2958 27.9263 49.3435C25.1958 47.3913 23.1356 44.6427 22.0276 41.4743C20.9197 38.3059 20.8181 34.8724 21.7369 31.6441C22.6558 28.4157 24.55 25.5503 27.1603 23.4401V23.9801C27.1656 29.357 29.3039 34.5122 33.106 38.3143C36.9081 42.1164 42.0633 44.2548 47.4403 44.2601C48.852 44.2651 50.2602 44.1176 51.6403 43.8201C50.2601 46.4311 48.1932 48.6157 45.6626 50.1383C43.132 51.661 40.2336 52.4637 37.2803 52.4601V52.3801Z" fill="#FEF9F3"/>
-      </svg>
+    </svg>
+  ) : (
+    // Иконка для темной темы (солнце)
+    <svg className='night_theme' width="74" height="74" viewBox="0 0 74 74" fill="none" xmlns="http://www.w3.org/2000/svg">
+<rect width="74" height="74" rx="37" fill="#FFD7B3"/>
+<path d="M36.9997 45.6667C41.7861 45.6667 45.6663 41.7865 45.6663 37C45.6663 32.2136 41.7861 28.3334 36.9997 28.3334C32.2132 28.3334 28.333 32.2136 28.333 37C28.333 41.7865 32.2132 45.6667 36.9997 45.6667Z" stroke="black" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"/>
+<path d="M36.9997 15.3334V19.6667M36.9997 54.3334V58.6667M21.6813 21.6817L24.7363 24.7367M49.263 49.2634L52.318 52.3184M15.333 37H19.6663M54.333 37H58.6663M24.7363 49.2634L21.6813 52.3184M52.318 21.6817L49.263 24.7367" stroke="black" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"/>
+</svg>
+
+
+  )}
       </button>
       
 
       <Header/>
-      <div className="background">
+      <div className="background" >
         <Blob />
       </div>
       <div className="first_block" style={{display: 'flex', justifyContent: 'center', alignItems: 'center'}}>
         <div className="blue_block" ></div>
         <div className="white_block">Сегодня <b>"Тёплый Дом"</b> – это уютное место, где ежегодно находят новый дом <b>более 100</b> собак и кошек</div>
-        <img src={dog1} className="dog1"/>
+        <img src={getThemeImage(dog1, dog1Dark)} className="dog1"/>
         <img src={dog2} className="dog2"/>
         <div className="biege_block" style={{textAlign: 'center'}}>
           <BiegeShape />
@@ -269,7 +293,7 @@ function App() {
 
       <div style={{display: 'flex', justifyContent: 'center', alignItems: 'center'}}>
         <div className="come_home">
-          <img src={dog3} className="dog3"/>
+          <img src={getThemeImage(dog3, dog3Dark)} className="dog3"/>
           <StepCircles />
           <span className="one"><b>Поедем домой?</b></span>
           <span className="two">Выбери подходящего питомца</span>
@@ -284,7 +308,7 @@ function App() {
       <div className="love_help">
         <span id="href_help">ЛЮБИШЬ ПОМОГАТЬ?</span>
         <div className='pinki'></div>
-        <img src={cat} className="cat"/>
+        <img src={getThemeImage(cat, catDark)} className="cat"/>
         <div style={{position: "absolute", marginTop: "-32vw", marginLeft: "21vw"}}>
 
           <div className="one_love">
@@ -415,7 +439,7 @@ function App() {
 
       <div style={{display: 'flex', justifyContent: 'center', alignItems: 'center', marginTop:'3vw'}} id="href_number">
         <div className="pink"></div>
-        <img src={pinkpets} className="pets"/>
+        <img src={getThemeImage(pinkpets, pinkpetsDark)} className="pets"/>
         <span className="your"><b>Ваш вклад спасает жизни – не откладывайте добро на потом!</b></span>
 
         <div className='CardBloop'>

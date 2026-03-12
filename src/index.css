@@ -21,6 +21,7 @@
   --help: #4D4F50;
   --carousel: #FFEDE1;
   --filters: #FFD7B2;
+  --vk: #0077FF;
 }
 
 /* Альтернативная цветовая схема */
@@ -39,6 +40,7 @@
   --help: #FEF9F3;
   --carousel: #4C403C;
   --filters: #75554A;
+  --vk: #FEF9F3;
 }
 
 
@@ -83,6 +85,7 @@ body{
   /* margin: 0%;
   padding: 0%; */
   position: absolute;
+  z-index: 1000;
 }
 
 header{
@@ -133,24 +136,34 @@ header{
 .background {
 position: absolute;
 overflow: hidden;
-top: -10px;
-z-index: -1;
-filter: blur(10px);
+top: 0vw;
+left: 0vw;
+/* z-index: 1; */
+/* filter: blur(10px); */
 }
 
 .blob {
-width: 35vw;
-height: 35vw;
+width: 14vw;
+
+
+  /* z-index: -1; */
+
 }
 
 .header-blob {
     position: absolute;
-    top: 0;
-    right: 0;
-    width: 70%;
+    
     z-index: -1;
-    filter: blur(10px);
-    /* transform: scaleX(1.1); Небольшое горизонтальное растяжение */
+    @media (min-width: 768px) {
+    top: 0.5vw;
+    right: 0.5vw;
+    width: 13vw;
+  }
+  @media (max-width: 767px) {
+    top: 1vw;
+    right: 1.5vw;
+    width: 20vw;
+  }
   }
   
   header {
