@@ -6,6 +6,7 @@ import CallCurator from './components/CallCurator';
 import Carousel from './components/Carousel';
 import Instruction from './components/Instruction';
 import BankAndPhone from './components/BankAndPhone';
+import Filters from './components/Filters'; // Добавьте этот импорт
 
 
 import Blob from './components/Blob'; 
@@ -32,8 +33,10 @@ function App() {
   const [pets, setPets] = useState([]);
   const [selectedPet, setSelectedPet] = useState(null);
   const [showPetModal, setShowPetModal] = useState(false);
-
   const [theme, setTheme] = useState('light');
+   const [filters, setFilters] = useState({}); // Пустые фильтры по умолчанию
+  const [loading, setLoading] = useState(false);
+  const [initialLoad, setInitialLoad] = useState(true); // Добавьте это
 
   const API_URL = 'http://localhost:8080/api/pets';
 
@@ -58,23 +61,130 @@ function App() {
     document.documentElement.setAttribute('data-theme', theme);
   }, []);
 
-  useEffect(() => {
-    loadPets();
-  }, []);
+  // Функция для преобразования возраста из строки в число (в годах)
+  const parseAge = (ageString) => {
+    if (!ageString) return 0;
+    
+    if (typeof ageString === 'number') return ageString;
+    
+    const ageStr = ageString.toLowerCase();
+    const numberMatch = ageStr.match(/\d+(?:[.,]\d+)?/);
+    if (!numberMatch) return 0;
+    
+    const number = parseFloat(numberMatch[0].replace(',', '.'));
+    
+    if (ageStr.includes('месяц') || ageStr.includes('мес')) {
+      return number / 12;
+    } else if (ageStr.includes('год') || ageStr.includes('лет') || ageStr.includes('г')) {
+      return number;
+    } else if (ageStr.includes('день') || ageStr.includes('дн')) {
+      return number / 365;
+    } else if (ageStr.includes('недел')) {
+      return number / 52;
+    }
+    
+    return number;
+  };
 
-  const loadPets = () => {
+  // Функция для фильтрации по возрасту
+  const filterByAge = (pets, ageFilter) => {
+    return pets.filter(pet => {
+      const ageInYears = parseAge(pet.age);
+      const ageInMonths = ageInYears * 12;
+      
+      switch(ageFilter) {
+        case 'under6months':
+          return ageInMonths < 6;
+        case 'under1':
+          return ageInYears < 1;
+        case 'over1':
+          return ageInYears >= 1;
+        case 'over5':
+          return ageInYears >= 5;
+        default:
+          return true;
+      }
+    });
+  };
+
+  // Проверка, есть ли активные фильтры
+  const hasActiveFilters = () => {
+    return Object.values(filters).some(value => value !== '');
+  };
+
+  // Функция для загрузки всех питомцев (без фильтров)
+  const loadAllPets = () => {
+    setLoading(true);
+    
     fetch(API_URL)
       .then(response => response.json())
       .then(data => {
-        // Преобразуем пути к фото
         const petsWithFullPhotoPath = data.map(pet => ({
           ...pet,
           photo: pet.photo ? `http://localhost:8080${pet.photo}` : 'https://placedog.net/300/200'
         }));
         setPets(petsWithFullPhotoPath);
+        setLoading(false);
+        setInitialLoad(false);
       })
-      .catch(error => console.error("Ошибка при загрузке питомцев:", error));
+      .catch(error => {
+        console.error("Ошибка при загрузке питомцев:", error);
+        setLoading(false);
+        setInitialLoad(false);
+      });
   };
+
+   // Функция для загрузки питомцев с фильтрами
+  const loadPetsWithFilters = (filterParams) => {
+    setLoading(true);
+    
+    const queryParams = new URLSearchParams();
+    
+    if (filterParams.gender) queryParams.append('gender', filterParams.gender);
+    if (filterParams.sterilized !== '') queryParams.append('sterilized', filterParams.sterilized);
+    if (filterParams.tray !== '') queryParams.append('tray', filterParams.tray);
+    if (filterParams.hasDescription !== '') queryParams.append('hasDescription', filterParams.hasDescription);
+    
+    const url = `${API_URL}${queryParams.toString() ? '?' + queryParams.toString() : ''}`;
+    
+    fetch(url)
+      .then(response => response.json())
+      .then(data => {
+        let filteredData = data;
+        if (filterParams.age) {
+          filteredData = filterByAge(data, filterParams.age);
+        }
+        
+        const petsWithFullPhotoPath = filteredData.map(pet => ({
+          ...pet,
+          photo: pet.photo ? `http://localhost:8080${pet.photo}` : 'https://placedog.net/300/200'
+        }));
+        
+        setPets(petsWithFullPhotoPath);
+        setLoading(false);
+      })
+      .catch(error => {
+        console.error("Ошибка при загрузке питомцев:", error);
+        setLoading(false);
+      });
+  };
+
+  // Обработчик изменения фильтров
+  const handleFilterChange = (newFilters) => {
+    setFilters(newFilters);
+    
+    // Если все фильтры пустые - загружаем всех питомцев
+    if (Object.values(newFilters).every(value => value === '')) {
+      loadAllPets();
+    } else {
+      loadPetsWithFilters(newFilters);
+    }
+  };
+
+  // Загрузка питомцев при монтировании компонента
+  useEffect(() => {
+    loadAllPets();
+  }, []);
 
   const toggleShowPets = () => {
     setShowAllPets(!showAllPets);
@@ -92,40 +202,33 @@ function App() {
 
   // Разделяем питомцев на группы для отображения
   const visiblePets = showAllPets ? pets : pets.slice(0, 8);
-  const firstRowPets = visiblePets.slice(0, 4);
-  const secondRowPets = visiblePets.slice(4, 8);
 
   return (
     <div className="wrapper">
-      <button className='button_night_theme'  onClick={toggleTheme}>
+      <button className='button_night_theme' onClick={toggleTheme}>
         {theme === 'light' ? (
-    // Иконка для светлой темы (луна)
-    <svg className='night_theme' width="74" height="74" viewBox="0 0 74 74" fill="none" xmlns="http://www.w3.org/2000/svg">
-      <rect width="74" height="74" rx="37" fill="#423D3A" fillOpacity="0.6"/>
-      <path d="M56.2803 39.0001C55.9916 38.7614 55.6417 38.6087 55.2704 38.5592C54.8991 38.5097 54.5214 38.5654 54.1803 38.7201C52.0654 39.6878 49.766 40.1859 47.4403 40.1801C43.138 40.1749 39.0122 38.4689 35.9625 35.4343C32.9129 32.3996 31.1867 28.2823 31.1603 23.9801C31.1696 22.6317 31.3374 21.2892 31.6603 19.9801C31.7288 19.6311 31.7031 19.2702 31.5858 18.9346C31.4685 18.5989 31.2637 18.3006 30.9928 18.0703C30.7218 17.8401 30.3943 17.6863 30.0441 17.6247C29.6938 17.5631 29.3335 17.596 29.0003 17.7201C25.8649 19.1299 23.1394 21.3136 21.0798 24.066C19.0202 26.8185 17.694 30.0493 17.226 33.455C16.7579 36.8607 17.1633 40.3296 18.404 43.5356C19.6447 46.7416 21.6801 49.5796 24.3189 51.783C26.9576 53.9864 30.1132 55.4828 33.4892 56.1317C36.8651 56.7806 40.3506 56.5606 43.6182 55.4925C46.8858 54.4244 49.8282 52.5432 52.1691 50.0256C54.5099 47.508 56.1724 44.4366 57.0003 41.1001C57.1011 40.718 57.0865 40.3147 56.9584 39.941C56.8303 39.5672 56.5943 39.2398 56.2803 39.0001ZM37.2803 52.3801C33.9238 52.3564 30.6567 51.2958 27.9263 49.3435C25.1958 47.3913 23.1356 44.6427 22.0276 41.4743C20.9197 38.3059 20.8181 34.8724 21.7369 31.6441C22.6558 28.4157 24.55 25.5503 27.1603 23.4401V23.9801C27.1656 29.357 29.3039 34.5122 33.106 38.3143C36.9081 42.1164 42.0633 44.2548 47.4403 44.2601C48.852 44.2651 50.2602 44.1176 51.6403 43.8201C50.2601 46.4311 48.1932 48.6157 45.6626 50.1383C43.132 51.661 40.2336 52.4637 37.2803 52.4601V52.3801Z" fill="#FEF9F3"/>
-    </svg>
-  ) : (
-    // Иконка для темной темы (солнце)
-    <svg className='night_theme' width="74" height="74" viewBox="0 0 74 74" fill="none" xmlns="http://www.w3.org/2000/svg">
-<rect width="74" height="74" rx="37" fill="#FFD7B3"/>
-<path d="M36.9997 45.6667C41.7861 45.6667 45.6663 41.7865 45.6663 37C45.6663 32.2136 41.7861 28.3334 36.9997 28.3334C32.2132 28.3334 28.333 32.2136 28.333 37C28.333 41.7865 32.2132 45.6667 36.9997 45.6667Z" stroke="black" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"/>
-<path d="M36.9997 15.3334V19.6667M36.9997 54.3334V58.6667M21.6813 21.6817L24.7363 24.7367M49.263 49.2634L52.318 52.3184M15.333 37H19.6663M54.333 37H58.6663M24.7363 49.2634L21.6813 52.3184M52.318 21.6817L49.263 24.7367" stroke="black" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"/>
-</svg>
-
-
-  )}
+          <svg className='night_theme' width="74" height="74" viewBox="0 0 74 74" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <rect width="74" height="74" rx="37" fill="#423D3A" fillOpacity="0.6"/>
+            <path d="M56.2803 39.0001C55.9916 38.7614 55.6417 38.6087 55.2704 38.5592C54.8991 38.5097 54.5214 38.5654 54.1803 38.7201C52.0654 39.6878 49.766 40.1859 47.4403 40.1801C43.138 40.1749 39.0122 38.4689 35.9625 35.4343C32.9129 32.3996 31.1867 28.2823 31.1603 23.9801C31.1696 22.6317 31.3374 21.2892 31.6603 19.9801C31.7288 19.6311 31.7031 19.2702 31.5858 18.9346C31.4685 18.5989 31.2637 18.3006 30.9928 18.0703C30.7218 17.8401 30.3943 17.6863 30.0441 17.6247C29.6938 17.5631 29.3335 17.596 29.0003 17.7201C25.8649 19.1299 23.1394 21.3136 21.0798 24.066C19.0202 26.8185 17.694 30.0493 17.226 33.455C16.7579 36.8607 17.1633 40.3296 18.404 43.5356C19.6447 46.7416 21.6801 49.5796 24.3189 51.783C26.9576 53.9864 30.1132 55.4828 33.4892 56.1317C36.8651 56.7806 40.3506 56.5606 43.6182 55.4925C46.8858 54.4244 49.8282 52.5432 52.1691 50.0256C54.5099 47.508 56.1724 44.4366 57.0003 41.1001C57.1011 40.718 57.0865 40.3147 56.9584 39.941C56.8303 39.5672 56.5943 39.2398 56.2803 39.0001ZM37.2803 52.3801C33.9238 52.3564 30.6567 51.2958 27.9263 49.3435C25.1958 47.3913 23.1356 44.6427 22.0276 41.4743C20.9197 38.3059 20.8181 34.8724 21.7369 31.6441C22.6558 28.4157 24.55 25.5503 27.1603 23.4401V23.9801C27.1656 29.357 29.3039 34.5122 33.106 38.3143C36.9081 42.1164 42.0633 44.2548 47.4403 44.2601C48.852 44.2651 50.2602 44.1176 51.6403 43.8201C50.2601 46.4311 48.1932 48.6157 45.6626 50.1383C43.132 51.661 40.2336 52.4637 37.2803 52.4601V52.3801Z" fill="#FEF9F3"/>
+          </svg>
+        ) : (
+          <svg className='night_theme' width="74" height="74" viewBox="0 0 74 74" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <rect width="74" height="74" rx="37" fill="#FFD7B3"/>
+            <path d="M36.9997 45.6667C41.7861 45.6667 45.6663 41.7865 45.6663 37C45.6663 32.2136 41.7861 28.3334 36.9997 28.3334C32.2132 28.3334 28.333 32.2136 28.333 37C28.333 41.7865 32.2132 45.6667 36.9997 45.6667Z" stroke="black" strokeWidth="4" strokeLinecap="round" strokeLinejoin="round"/>
+            <path d="M36.9997 15.3334V19.6667M36.9997 54.3334V58.6667M21.6813 21.6817L24.7363 24.7367M49.263 49.2634L52.318 52.3184M15.333 37H19.6663M54.333 37H58.6663M24.7363 49.2634L21.6813 52.3184M52.318 21.6817L49.263 24.7367" stroke="black" strokeWidth="4" strokeLinecap="round" strokeLinejoin="round"/>
+          </svg>
+        )}
       </button>
       
-
       <Header/>
-      <div className="background" >
+      <div className="background">
         <Blob />
       </div>
       <div className="first_block" style={{display: 'flex', justifyContent: 'center', alignItems: 'center'}}>
-        <div className="blue_block" ></div>
+        <div className="blue_block"></div>
         <div className="white_block">Сегодня <b>"Тёплый Дом"</b> – это уютное место, где ежегодно находят новый дом <b>более 100</b> собак и кошек</div>
-        <img src={getThemeImage(dog1, dog1Dark)} className="dog1"/>
-        <img src={dog2} className="dog2"/>
+        <img src={getThemeImage(dog1, dog1Dark)} className="dog1" alt="dog"/>
+        <img src={dog2} className="dog2" alt="dog"/>
         <div className="biege_block" style={{textAlign: 'center'}}>
           <BiegeShape />
           <span className="dom">Приют <b>"Тёплый дом"</b></span>
@@ -133,167 +236,170 @@ function App() {
         </div>
       </div>
 
-
       <div className="dream_home">
         <span id="dream">МЕЧТАЮТ О ДОМЕ</span>
       </div>
 
+      {/* Фильтры */}
+      <Filters onFilterChange={handleFilterChange} />
 
-{/* КАРТОЧКИ ЖИВОТНЫХ ИЗ БД */}
-<div className="pats" style={{textAlign:"center"}}>
-  <div className="container ">
-    {/* Для всех экранов - адаптивная сетка */}
-    <div className="row justify-content-center text-center" style={{paddingRight:"0px"}}>
-      {pets.slice(0, showAllPets ? pets.length : 8).map((pet, index) => (
-        <div 
-          key={pet.id || index} 
-          className="col-6 col-md-4 col-lg-3 text-center" 
-          style={{padding:"0px", marginBottom: "20px",
-            display: "flex",
-            justifyContent: "center"}}
-        >
-          <div className="pet-card" onClick={() => handlePetClick(pet)}>
-            <img src={pet.photo} alt={pet.name} className="pet" />
-            <div className='pet-info'>
-              <h5 style={{margin:'0'}}>{pet.name}</h5>
-              <p style={{margin:'0'}}>{pet.gender}</p>
-              <p style={{margin:'0'}}>{pet.age}</p>
-            </div>
-              
-            
-          </div>
-        </div>
-      ))}
-    </div>
-
-    {/* Кнопка "Показать больше/Скрыть" */}
-    {pets.length > 8 && (
-      <button className="look_more" onClick={toggleShowPets}>
-        {showAllPets ? 'Скрыть' : 'Показать больше'}
-      </button>
-    )}
-  </div>
-</div>
-
-      {/* Модальное окно с детальной информацией о питомце */}
-{showPetModal && selectedPet && (
-  <div className="modal-overlay" onClick={closePetModal} >
-    <div className="modal-content_pet pet-modal" onClick={(e) => e.stopPropagation()}>
-      <button className="modal-close-btn" style={{fontSize: "35px"}} onClick={closePetModal}>×</button>
       
-      <div className="modal-pet-container">
-        {/* Для больших экранов - картинка слева, контент справа */}
-        <div className="d-none d-md-block">
-          <div className="modal-pet-layout-horizontal">
-            <div className="modal-pet-image-side" >
-              <img  src={selectedPet.photo} alt={selectedPet.name} />
-              
+
+      {/* КАРТОЧКИ ЖИВОТНЫХ ИЗ БД */}
+      <div className="pats" style={{textAlign:"center"}}>
+        <div className="container">
+          {loading ? (
+            <div style={{textAlign: 'center', padding: '40px'}}>
+              <div className="spinner"></div>
+              <p>Загрузка питомцев...</p>
             </div>
-            
-            <div className="modal-pet-details-side">
-              <h2>{selectedPet.name}</h2>
-              
-              <div className="pet-details-grid">
-                <div className="detail-item">
-                  
-                  <span className="detail-value">{selectedPet.gender}</span>
+          ) : (
+            <>
+              {pets.length === 0 ? (
+                <div style={{textAlign: 'center', padding: '40px'}}>
+                  <p>По выбранным фильтрам питомцев не найдено</p>
                 </div>
-                
-                <div className="detail-item">
-                  
-                  <span className="detail-value">{selectedPet.age}</span>
+              ) : (
+                <div className="row justify-content-center text-center" style={{paddingRight:"0px"}}>
+                  {visiblePets.map((pet, index) => (
+                    <div 
+                      key={pet.id || index} 
+                      className="col-6 col-md-4 col-lg-3 text-center" 
+                      style={{
+                        padding:"0px", 
+                        marginBottom: "20px",
+                        display: "flex",
+                        justifyContent: "center"
+                      }}
+                    >
+                      <div className="pet-card" onClick={() => handlePetClick(pet)}>
+                        <img src={pet.photo} alt={pet.name} className="pet" />
+                        <div className='pet-info'>
+                          <h5 style={{margin:'0'}}>{pet.name}</h5>
+                          <p style={{margin:'0'}}>{pet.gender}</p>
+                          <p style={{margin:'0'}}>{pet.age}</p>
+                        </div>
+                      </div>
+                    </div>
+                  ))}
                 </div>
+              )}
 
-                <div className="detail-item">
-                  
-                  <span className="detail-value">{selectedPet.sterilized ? "Стерелизован" : "Не стерелизован"}</span>
-                </div>
-                
-                <div className="detail-item">
-                  
-                  <span className="detail-value">{selectedPet.tray ? "Приучен к лотку" : "Не приучен к лотку"}</span>
-                </div>
-              </div>
-
-              <div className="detail-item-health">
-                  <h4 ><b>Здоровье</b></h4>
-                  <p >{selectedPet.health}</p>
-                </div>
-
-              
-              <div className="pet-description">
-                <h4><b>Описание</b></h4>
-                <p>{selectedPet.description}</p>
-              </div>
-              
-              <div className="modal-actions" >
-                  <CallCurator />
-                
-              </div>
-            </div>
-          </div>
-        </div>
-
-        {/* Для мобильных экранов - картинка сверху, контент снизу */}
-        <div className="d-block d-md-none">
-          <div className="modal-pet-layout-vertical">
-            <div className="modal-pet-image-top">
-              <img src={selectedPet.photo} alt={selectedPet.name} />
-            </div>
-            
-            <div className="modal-pet-details-bottom">
-              <h2>{selectedPet.name}</h2>
-              
-              <div className="pet-details-grid">
-                <div className="detail-item">
-                  
-                  <span className="detail-value">{selectedPet.gender}</span>
-                </div>
-                
-                <div className="detail-item">
-                  
-                  <span className="detail-value">{selectedPet.age}</span>
-                </div>
-                
-
-                
-                <div className="detail-item">
-                  
-                  <span className="detail-value">{selectedPet.sterilized ? "Стерелизован" : "Не стерилизован"}</span>
-                </div>
-                
-                <div className="detail-item">
-                
-                  <span className="detail-value">{selectedPet.tray ? "Приучен к лотку" : "Не приучен к лотку"}</span>
-                </div>
-              </div>
-
-              <div className="detail-item-health">
-                  <h4 className="detail-label"><b>Здоровье</b></h4>
-                  <p className="detail-value">{selectedPet.health}</p>
-                </div>
-              
-              <div className="pet-description">
-                <h4><b>Описание</b></h4>
-                <p>{selectedPet.description}</p>
-              </div>
-              
-              <div className="modal-actions" style={{marginLeft:"2vw"}}>
-                <CallCurator />
-              
-              </div>
-            </div>
-          </div>
+              {/* Кнопка "Показать больше/Скрыть" */}
+              {pets.length > 8 && (
+                <button className="look_more" onClick={toggleShowPets}>
+                  {showAllPets ? 'Скрыть' : 'Показать больше'}
+                </button>
+              )}
+            </>
+          )}
         </div>
       </div>
-    </div>
-  </div>
-)}
 
+      {/* Модальное окно с детальной информацией о питомце */}
+      {showPetModal && selectedPet && (
+        <div className="modal-overlay" onClick={closePetModal}>
+          <div className="modal-content_pet pet-modal" onClick={(e) => e.stopPropagation()}>
+            <button className="modal-close-btn" style={{fontSize: "35px"}} onClick={closePetModal}>×</button>
+            
+            <div className="modal-pet-container">
+              {/* Для больших экранов */}
+              <div className="d-none d-md-block">
+                <div className="modal-pet-layout-horizontal">
+                  <div className="modal-pet-image-side">
+                    <img src={selectedPet.photo} alt={selectedPet.name} />
+                  </div>
+                  
+                  <div className="modal-pet-details-side">
+                    <h2>{selectedPet.name}</h2>
+                    
+                    <div className="pet-details-grid">
+                      <div className="detail-item">
+                        <span className="detail-value">{selectedPet.gender}</span>
+                      </div>
+                      
+                      <div className="detail-item">
+                        <span className="detail-value">{selectedPet.age}</span>
+                      </div>
+
+                      <div className="detail-item">
+                        <span className="detail-value">{selectedPet.sterilized ? "Стерелизован" : "Не стерелизован"}</span>
+                      </div>
+                      
+                      <div className="detail-item">
+                        <span className="detail-value">{selectedPet.tray ? "Приучен к лотку" : "Не приучен к лотку"}</span>
+                      </div>
+                    </div>
+
+                    <div className="detail-item-health">
+                      <h4><b>Здоровье</b></h4>
+                      <p>{selectedPet.health}</p>
+                    </div>
+
+                    <div className="pet-description">
+                      <h4><b>Описание</b></h4>
+                      <p>{selectedPet.description}</p>
+                    </div>
+                    
+                    <div className="modal-actions">
+                      <CallCurator />
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              {/* Для мобильных экранов */}
+              <div className="d-block d-md-none">
+                <div className="modal-pet-layout-vertical">
+                  <div className="modal-pet-image-top">
+                    <img src={selectedPet.photo} alt={selectedPet.name} />
+                  </div>
+                  
+                  <div className="modal-pet-details-bottom">
+                    <h2>{selectedPet.name}</h2>
+                    
+                    <div className="pet-details-grid">
+                      <div className="detail-item">
+                        <span className="detail-value">{selectedPet.gender}</span>
+                      </div>
+                      
+                      <div className="detail-item">
+                        <span className="detail-value">{selectedPet.age}</span>
+                      </div>
+                      
+                      <div className="detail-item">
+                        <span className="detail-value">{selectedPet.sterilized ? "Стерелизован" : "Не стерилизован"}</span>
+                      </div>
+                      
+                      <div className="detail-item">
+                        <span className="detail-value">{selectedPet.tray ? "Приучен к лотку" : "Не приучен к лотку"}</span>
+                      </div>
+                    </div>
+
+                    <div className="detail-item-health">
+                      <h4 className="detail-label"><b>Здоровье</b></h4>
+                      <p className="detail-value">{selectedPet.health}</p>
+                    </div>
+                    
+                    <div className="pet-description">
+                      <h4><b>Описание</b></h4>
+                      <p>{selectedPet.description}</p>
+                    </div>
+                    
+                    <div className="modal-actions" style={{marginLeft:"2vw"}}>
+                      <CallCurator />
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
 
       <div style={{display: 'flex', justifyContent: 'center', alignItems: 'center'}}>
         <div className="come_home">
-          <img src={getThemeImage(dog3, dog3Dark)} className="dog3"/>
+          <img src={getThemeImage(dog3, dog3Dark)} className="dog3" alt="dog"/>
           <StepCircles />
           <span className="one"><b>Поедем домой?</b></span>
           <span className="two">Выбери подходящего питомца</span>
@@ -301,7 +407,7 @@ function App() {
           <span className="four">Приезжай знакомиться</span>
           <span className="five">Подготовься к новоселью</span>
           <span className="six">Привези нового друга домой</span>
-               <PhoneModal />
+          <PhoneModal />
         </div> 
       </div>
 
@@ -432,14 +538,12 @@ function App() {
       {/* НОВОСТИ */}
       <div style={{display: 'flex', justifyContent: 'center', alignItems: 'center'}}>
         <Carousel />
-        
       </div>
 
       {/* КОНТАКТЫ ДЛЯ ПЕРЕВОДОВ */}
-
       <div style={{display: 'flex', justifyContent: 'center', alignItems: 'center', marginTop:'3vw'}} id="href_number">
         <div className="pink"></div>
-        <img src={getThemeImage(pinkpets, pinkpetsDark)} className="pets"/>
+        <img src={getThemeImage(pinkpets, pinkpetsDark)} className="pets" alt="pets"/>
         <span className="your"><b>Ваш вклад спасает жизни – не откладывайте добро на потом!</b></span>
 
         <div className='CardBloop'>
@@ -448,12 +552,9 @@ function App() {
           </svg>
         </div>
         
-
         <span className="hN"><b>Номера счетов</b></span>
-
-          <p className='cart'>Карта:</p>
-          <p className='cart2'>Счёт:</p>
-
+        <p className='cart'>Карта:</p>
+        <p className='cart2'>Счёт:</p>
 
         <BankAndPhone/>
         
@@ -465,13 +566,10 @@ function App() {
         
         <span className="KN"><b>Инструкция для благотворителей</b></span>
         <span className="th">Спасибо, что хотите помочь!</span>
-        {/* <button className='manual'>Прочитать инструкцию</button> */}
         <Instruction/>
-        
       </div>
 
       <YandexMapContainer />
-
       <Footer/>
     </div>
   );

@@ -22,6 +22,7 @@
   --carousel: #FFEDE1;
   --filters: #FFD7B2;
   --vk: #0077FF;
+  --filter-activ: #FFCC9D;
 }
 
 /* Альтернативная цветовая схема */
@@ -41,6 +42,7 @@
   --carousel: #4C403C;
   --filters: #75554A;
   --vk: #FEF9F3;
+  --filter-activ: #8C533F;
 }
 
 
@@ -152,15 +154,10 @@ left: 0vw;
 
 .blob {
 width: 14vw;
-
-
-  /* z-index: -1; */
-
 }
 
 .header-blob {
     position: absolute;
-    
     z-index: -1;
     @media (min-width: 768px) {
     top: 0.5vw;
@@ -168,9 +165,9 @@ width: 14vw;
     width: 13vw;
   }
   @media (max-width: 767px) {
-    top: 1vw;
-    right: 1.5vw;
-    width: 20vw;
+    top: 2vw;
+    right: 10vw;
+    width: 22vw;
   }
   }
   
@@ -332,7 +329,7 @@ width: 14vw;
   @media (min-width: 768px) {
     font-size: 4vw;
     margin-top: 4vw;
-    margin-bottom: 3vw;
+    margin-bottom: 1vw;
   }
   @media (max-width: 767px) {
     font-size: 7vw;
@@ -340,6 +337,201 @@ width: 14vw;
     margin-bottom: 3vw;
   }
 }
+
+
+
+
+
+.filters-wrapper {
+  max-width: 1200px;
+  margin: 0 auto 1vw;
+  /* padding: 20px; */
+  @media (min-width: 768px) {
+    padding: 20px;
+  }
+  @media (max-width: 767px) {
+    
+  }
+}
+
+.filters-title {
+  font-size: 1.8rem;
+  font-weight: 700;
+  color: var(--text-color);
+  margin: 0;
+  font-family: 'Comfortaa', cursive;
+}
+
+.clear-filters-btn {
+  background-color: transparent;
+  border: 2px solid var(--primary-pink);
+  border-radius: 30px;
+  padding: 8px 20px;
+  font-size: 0.95rem;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  color: var(--text-color);
+  font-family: 'Comfortaa', cursive;
+  font-weight: 500;
+}
+
+.clear-filters-btn:hover {
+  background-color: var(--primary-pink);
+  color: white;
+}
+
+.filters-grid {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+}
+
+.filter-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 5px;
+  align-items: center;
+  justify-content: center;
+}
+
+.filter-chip {
+  background-color: var(--biege-block);
+  /* border: 2px solid var(--biege-block); */
+  border-radius: 30px;
+  
+  cursor: pointer;
+  transition: all 0.2s ease;
+  color: var(--text-color);
+  font-family: 'Comfortaa', cursive;
+  font-weight: 500;
+  white-space: nowrap;
+
+  @media (min-width: 768px) {
+    font-size: 0.95rem;
+    padding: 10px 20px;
+  }
+  @media (max-width: 767px) {
+    font-size: 0.65rem;
+    padding: 2px 6px;
+  }
+}
+
+.filter-chip:hover {
+  background-color: var(--biege-block);
+  transform: translateY(-2px);
+  box-shadow: 0 4px 8px var(--shadow-color);
+}
+
+.filter-chip.active {
+  background-color: var(--filter-activ);
+  /* border-color: var(--primary-pink); */
+  color: var(--text-color);
+  /* box-shadow: 0 4px 12px rgba(232, 176, 175, 0.4); */
+}
+
+/* Стили для возрастного ряда */
+.age-row {
+  flex-wrap: wrap;
+}
+
+.age-row .filter-chip {
+  background-color: var(--bg-color);
+}
+
+/* Активные фильтры */
+.active-filters {
+  margin-top: 25px;
+  padding-top: 20px;
+  border-top: 1px solid var(--biege-block);
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 15px;
+}
+
+.active-filters-label {
+  font-size: 0.95rem;
+  font-weight: 600;
+  color: var(--text-color);
+  opacity: 0.8;
+}
+
+.active-filter-tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+
+.filter-tag {
+  background-color: var(--primary-light-pink);
+  border-radius: 20px;
+  padding: 6px 15px;
+  font-size: 0.9rem;
+  color: var(--text-color);
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  font-family: 'Comfortaa', cursive;
+  box-shadow: 0 2px 4px var(--shadow-color);
+}
+
+/* Адаптивность для планшетов */
+@media (max-width: 768px) {
+  .filters-wrapper {
+    /* padding: 15px; */
+    /* margin: 0 15px 20px; */
+  }
+
+  .filters-title {
+    font-size: 1.4rem;
+  }
+
+  .filter-row {
+    /* flex-direction: column; */
+    align-items: stretch;
+  }
+
+  .filter-chip {
+    /* width: 100%; */
+    text-align: center;
+    white-space: normal;
+  }
+
+  .active-filters {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 10px;
+  }
+
+  .active-filter-tags {
+    width: 100%;
+  }
+
+  .filter-tag {
+    width: 100%;
+    text-align: center;
+    justify-content: center;
+  }
+}
+
+
+
+/* Темная тема */
+[data-theme="dark"] .filter-chip.active {
+  background-color: var(--filter-activ);
+  color: var(--text-color);
+}
+
+[data-theme="dark"] .filter-tag {
+  background-color: var(--filter-activ);
+  color: var(--text-color);
+}
+
+
+
+
+
+
 
 /* Стили для карточек питомцев */
 .pet-card {
