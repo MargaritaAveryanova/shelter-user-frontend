@@ -6,7 +6,8 @@ import CallCurator from './components/CallCurator';
 import Carousel from './components/Carousel';
 import Instruction from './components/Instruction';
 import BankAndPhone from './components/BankAndPhone';
-import Filters from './components/Filters'; // Добавьте этот импорт
+import Filters from './components/Filters';
+import FAQ from './components/FAQ';
 
 
 import Blob from './components/Blob'; 
@@ -570,6 +571,8 @@ function App() {
       </div>
 
       <YandexMapContainer />
+      <FAQ/>
+      <hr style={{height:"1px", width:"90%", textAlign:"center", margin:"1.5vw auto 1.5vw auto"}}></hr>
       <Footer/>
     </div>
   );
