@@ -35,7 +35,7 @@ function App() {
   const [selectedPet, setSelectedPet] = useState(null);
   const [showPetModal, setShowPetModal] = useState(false);
   const [theme, setTheme] = useState('light');
-   const [filters, setFilters] = useState({}); // Пустые фильтры по умолчанию
+  const [filters, setFilters] = useState({}); // Пустые фильтры по умолчанию
   const [loading, setLoading] = useState(false);
   const [initialLoad, setInitialLoad] = useState(true); // Добавьте это
 
@@ -113,7 +113,7 @@ function App() {
     return Object.values(filters).some(value => value !== '');
   };
 
-  // Функция для загрузки всех питомцев (без фильтров)
+  // Функция для загрузки всех питомцев
   const loadAllPets = () => {
     setLoading(true);
     
@@ -412,6 +412,11 @@ function App() {
         </div> 
       </div>
 
+      {/* НОВОСТИ */}
+      <div style={{display: 'flex', justifyContent: 'center', alignItems: 'center'}}>
+        <Carousel />
+      </div>
+
       <div className="love_help">
         <span id="href_help">ЛЮБИШЬ ПОМОГАТЬ?</span>
         <div className='pinki'></div>
@@ -536,10 +541,7 @@ function App() {
         </div>
       </div>
 
-      {/* НОВОСТИ */}
-      <div style={{display: 'flex', justifyContent: 'center', alignItems: 'center'}}>
-        <Carousel />
-      </div>
+      
 
       {/* КОНТАКТЫ ДЛЯ ПЕРЕВОДОВ */}
       <div style={{display: 'flex', justifyContent: 'center', alignItems: 'center', marginTop:'3vw'}} id="href_number">

@@ -1391,9 +1391,6 @@ width: 14vw;
 }
 
 .carousel-slide {
-  /* flex-shrink: 0; */
-  /* padding: 10px; */
-  /* box-sizing: border-box; */
   background-color: var(--bg-color);
   border: none;
 }
@@ -1815,6 +1812,7 @@ width: 14vw;
 /* Анимация появления модального окна */
 .modal-overlay {
   animation: fadeIn 0.3s ease;
+  
 }
 
 .modal-content {
@@ -2081,6 +2079,7 @@ width: 14vw;
   flex-direction: column;
   min-height: 400px; /* или нужная высота */
   position: relative;
+  border-radius: 20px;
   @media (min-width: 768px) {
     height: 95%;
     width: 60%;
@@ -2103,6 +2102,7 @@ width: 14vw;
   align-items: center;
   z-index: 1000;
   padding: 20px;
+  
 }
 
 
