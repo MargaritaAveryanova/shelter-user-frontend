@@ -37,7 +37,7 @@ function App() {
   const [theme, setTheme] = useState('light');
   const [filters, setFilters] = useState({}); // Пустые фильтры по умолчанию
   const [loading, setLoading] = useState(false);
-  const [initialLoad, setInitialLoad] = useState(true); // Добавьте это
+  const [initialLoad, setInitialLoad] = useState(true);
 
   const API_URL = 'http://localhost:8080/api/pets';
 

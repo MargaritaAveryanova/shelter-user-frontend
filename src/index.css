@@ -184,6 +184,7 @@ width: 14vw;
 /* ПЕРВЫЕ БЛОКИ С СОБАКАМИ */
 
 .blue_block{
+  position: relative;
   background-color:var(--primary-blue);
   @media (min-width: 768px) {
     height: 30vw;
@@ -917,6 +918,7 @@ width: 14vw;
 /* ПОЕДЕМ ДОМОЙ */
 
 .come_home{
+  position: relative;
   background-color:var(--modal-content-pat);
   @media (min-width: 768px) {
     height: 35vw;
@@ -1137,6 +1139,7 @@ width: 14vw;
 
 .pinki{
   @media (max-width: 767px) {
+    position: relative;
     background-color: var(--primary-light-pink);
     height: 85vw;
     width: 90vw;
@@ -1883,6 +1886,7 @@ width: 14vw;
 
 
 .pink{
+  position: relative;
   background-color: var(--primary-pink);
   @media (min-width: 768px) {
     height: 20vw;
@@ -2403,7 +2407,7 @@ align-self: flex-end;
 
 .faq-answer-inner {
   padding-top: 10px;
-  color: #555;
+  color: --text-color;
   @media (min-width: 768px) {
     font-size: 16px;
   }
